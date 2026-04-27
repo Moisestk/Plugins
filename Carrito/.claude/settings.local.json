@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Moises/Documents/Code/C/custom-product-filter//**)",
+      "Read(//c/Users/Moises/Documents/Code/C/mi-cuenta-ui//**)"
+    ]
+  }
+}

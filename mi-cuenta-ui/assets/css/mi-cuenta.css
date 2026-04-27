@@ -1,0 +1,1277 @@
+/* =============================================================
+   Mi Cuenta UI — Vynk Design System
+   ============================================================= */
+
+/* ── Variables ─────────────────────────────────────────────── */
+:root {
+    /* Vynk design system (shared with Checkout-vynk) */
+    --vynk-accent:        #bf1f1f;
+    --vynk-accent-dark:   #a01818;
+    --vynk-accent-soft:   rgba(191,31,31,0.08);
+    --vynk-dark:          #1a1a1a;
+    --vynk-bg:            #ffffff;
+    --vynk-bg-page:       #f7f8f9;
+    --vynk-bg-input:      #f8f9fa;
+    --vynk-border:        #ebebeb;
+    --vynk-border-focus:  #bf1f1f;
+    --vynk-secondary:     #6b7280;
+    --vynk-success:       #10B981;
+    --vynk-font:          'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --vynk-r-card:        20px;
+    --vynk-r-input:       14px;
+    --vynk-r-btn:         50px;
+    --vynk-shadow-sm:     0 2px 8px rgba(0,0,0,0.07);
+    --vynk-shadow:        0 4px 16px rgba(0,0,0,0.10);
+    --vynk-transition:    0.22s ease;
+
+    /* Mi Cuenta específicos */
+    --mc-sidebar-width:   260px;
+    --mc-sidebar-bg:      #1a1a1a;
+    --mc-sidebar-text:    #c8c8d0;
+    --mc-sidebar-active:  #bf1f1f;
+    --mc-page-bg:         #f7f8f9;
+    --mc-card-bg:         #ffffff;
+    --mc-border:          #ebebeb;
+    --mc-secondary:       #6b7280;
+    --mc-input-bg:        #f8f9fa;
+    --mc-input-border:    #dde1e7;
+}
+
+/* ── Reset del contenedor del tema ─────────────────────────── */
+/* Ocultar título de página "Mi cuenta" del tema */
+body.mi-cuenta-active h1.entry-title,
+body.mi-cuenta-active .page-header,
+body.mi-cuenta-active .woocommerce > h1:first-child,
+body.mi-cuenta-active .woocommerce-MyAccount-content > h1:first-child {
+    display: none !important;
+}
+
+/* Resetear todos los contenedores del tema */
+body.mi-cuenta-active .entry-content,
+body.mi-cuenta-active .page-content,
+body.mi-cuenta-active article.page > .entry-content,
+body.mi-cuenta-active .site-main > article,
+body.mi-cuenta-active .woocommerce,
+body.mi-cuenta-active #primary,
+body.mi-cuenta-active #content,
+body.mi-cuenta-active main#main,
+body.mi-cuenta-active .site-content,
+body.mi-cuenta-active .content-area {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    float: none !important;
+}
+
+/* Técnica full-bleed: romper el contenedor del tema */
+body.mi-cuenta-active .mc-dashboard,
+body.mi-cuenta-active .mc-auth-wrapper {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+body.mi-cuenta-active .woocommerce-notices-wrapper {
+    display: none; /* los notices los manejamos dentro de mc-main */
+}
+
+/* Evitar scroll horizontal por el full-bleed */
+body.mi-cuenta-active { overflow-x: hidden; }
+
+/* ── Box sizing ─────────────────────────────────────────────── */
+.mc-dashboard *,
+.mc-dashboard *::before,
+.mc-dashboard *::after,
+.mc-auth-wrapper *,
+.mc-auth-wrapper *::before,
+.mc-auth-wrapper *::after { box-sizing: border-box; }
+
+/* ─────────────────────────────────────────────────────────────
+   LAYOUT PRINCIPAL — Dashboard Grid
+   ───────────────────────────────────────────────────────────── */
+.mc-dashboard {
+    display: grid;
+    grid-template-columns: var(--mc-sidebar-width) 1fr;
+    min-height: 100vh;
+    font-family: var(--vynk-font);
+    color: var(--vynk-dark);
+    background: var(--mc-page-bg);
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+.mc-sidebar {
+    background: var(--mc-sidebar-bg);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: none;
+}
+.mc-sidebar::-webkit-scrollbar { display: none; }
+
+/* Logo / brand en sidebar */
+.mc-sidebar-brand {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+}
+.mc-sidebar-brand img { max-height: 36px; display: block; }
+
+/* Perfil de usuario en sidebar */
+.mc-sidebar-user {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    flex-shrink: 0;
+}
+.mc-sidebar-user__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--vynk-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+.mc-sidebar-user__name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+    margin: 0 0 2px;
+}
+.mc-sidebar-user__email {
+    font-size: 11px;
+    color: var(--mc-sidebar-text);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+/* Navegación principal del sidebar */
+.mc-nav {
+    flex: 1;
+    padding: 12px 0;
+}
+.mc-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.mc-nav__item { margin: 2px 8px; }
+.mc-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: var(--mc-sidebar-text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background var(--vynk-transition), color var(--vynk-transition);
+    white-space: nowrap;
+}
+.mc-nav__link:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    text-decoration: none;
+}
+.mc-nav__item.is-active .mc-nav__link {
+    background: var(--mc-sidebar-active);
+    color: #fff;
+}
+.mc-nav__icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+.mc-nav__item.is-active .mc-nav__icon { opacity: 1; }
+
+/* Separador en nav */
+.mc-nav__sep {
+    margin: 8px 16px;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+/* Topbar mobile (inline, no flotante) */
+.mc-mobile-topbar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0 20px;
+    margin-bottom: 4px;
+    border-bottom: 1.5px solid var(--mc-border);
+    margin-bottom: 24px;
+}
+.mc-mobile-topbar__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+}
+.mc-mobile-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--mc-sidebar-bg);
+    border: none;
+    border-radius: 10px;
+    padding: 8px 14px;
+    cursor: pointer;
+    color: #fff;
+    font-family: var(--vynk-font);
+    font-size: 13px;
+    font-weight: 600;
+}
+.mc-mobile-toggle svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* Overlay mobile */
+.mc-sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    backdrop-filter: blur(2px);
+}
+.mc-sidebar-overlay.is-visible { display: block; }
+
+/* ── Main content ───────────────────────────────────────────── */
+.mc-main {
+    background: var(--mc-page-bg);
+    padding: 36px 40px;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Notices de WooCommerce dentro del main */
+.mc-main .woocommerce-notices-wrapper,
+.mc-main > .woocommerce-error,
+.mc-main > .woocommerce-message,
+.mc-main > .woocommerce-info {
+    display: block !important;
+    margin-bottom: 20px;
+}
+
+/* Encabezado de sección */
+.mc-section-header {
+    margin-bottom: 24px;
+}
+.mc-section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+    margin: 0 0 4px;
+}
+.mc-section-subtitle {
+    font-size: 14px;
+    color: var(--mc-secondary);
+    margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CARD COMPONENT
+   ───────────────────────────────────────────────────────────── */
+.mc-card {
+    background: var(--mc-card-bg);
+    border-radius: var(--vynk-r-card);
+    box-shadow: var(--vynk-shadow-sm);
+    border: 1.5px solid var(--mc-border);
+    padding: 28px 32px;
+    margin-bottom: 20px;
+}
+.mc-card:last-child { margin-bottom: 0; }
+
+.mc-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1.5px solid var(--mc-border);
+}
+.mc-card__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+    margin: 0;
+}
+.mc-card__action {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--vynk-accent);
+    text-decoration: none;
+    transition: color var(--vynk-transition);
+}
+.mc-card__action:hover { color: var(--vynk-accent-dark); }
+
+/* ─────────────────────────────────────────────────────────────
+   DASHBOARD — Stats Grid
+   ───────────────────────────────────────────────────────────── */
+.mc-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.mc-stat-card {
+    background: var(--mc-card-bg);
+    border-radius: var(--vynk-r-card);
+    box-shadow: var(--vynk-shadow-sm);
+    border: 1.5px solid var(--mc-border);
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.mc-stat-card__icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--vynk-accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.mc-stat-card__icon svg { width: 22px; height: 22px; color: var(--vynk-accent); }
+.mc-stat-card__value {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.mc-stat-card__label {
+    font-size: 12px;
+    color: var(--mc-secondary);
+    font-weight: 500;
+}
+
+/* Tarjeta de bienvenida */
+.mc-greeting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.mc-greeting__text h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+    margin: 0 0 6px;
+}
+.mc-greeting__text p {
+    font-size: 14px;
+    color: var(--mc-secondary);
+    margin: 0;
+}
+.mc-greeting__cta { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ─────────────────────────────────────────────────────────────
+   TABLA DE PEDIDOS
+   ───────────────────────────────────────────────────────────── */
+.mc-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.mc-orders-table thead th {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mc-secondary);
+    padding: 10px 16px;
+    border-bottom: 1.5px solid var(--mc-border);
+    text-align: left;
+    white-space: nowrap;
+}
+.mc-orders-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--mc-border);
+    color: var(--vynk-dark);
+    vertical-align: middle;
+}
+.mc-orders-table tbody tr:last-child td { border-bottom: none; }
+.mc-orders-table tbody tr:hover td { background: #fafafa; }
+
+.mc-order-number {
+    font-weight: 700;
+    color: var(--vynk-accent) !important;
+    text-decoration: none;
+}
+.mc-order-number:hover { text-decoration: underline; }
+
+.mc-order-date { color: var(--mc-secondary) !important; }
+
+.mc-empty-orders {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--mc-secondary);
+}
+.mc-empty-orders svg { width: 48px; height: 48px; opacity: 0.3; margin-bottom: 12px; }
+.mc-empty-orders p { margin: 0 0 16px; font-size: 15px; }
+
+/* ─────────────────────────────────────────────────────────────
+   STATUS BADGES
+   ───────────────────────────────────────────────────────────── */
+.mc-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.mc-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+.mc-status--processing { background: rgba(59,130,246,0.1);  color: #3b82f6; }
+.mc-status--completed  { background: rgba(16,185,129,0.1);  color: #10b981; }
+.mc-status--pending    { background: rgba(245,158,11,0.1);  color: #f59e0b; }
+.mc-status--cancelled  { background: rgba(239,68,68,0.1);   color: #ef4444; }
+.mc-status--on-hold    { background: rgba(107,114,128,0.1); color: #6b7280; }
+.mc-status--refunded   { background: rgba(139,92,246,0.1);  color: #8b5cf6; }
+.mc-status--failed     { background: rgba(239,68,68,0.08);  color: #ef4444; }
+
+/* ─────────────────────────────────────────────────────────────
+   DETALLE DE PEDIDO
+   ───────────────────────────────────────────────────────────── */
+.mc-order-detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+.mc-order-detail-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.mc-order-detail-meta span {
+    font-size: 13px;
+    color: var(--mc-secondary);
+}
+.mc-order-detail-meta span + span::before {
+    content: '·';
+    margin-right: 8px;
+}
+
+.mc-order-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.mc-order-items-table th {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mc-secondary);
+    padding: 8px 12px;
+    border-bottom: 1.5px solid var(--mc-border);
+    text-align: left;
+}
+.mc-order-items-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--mc-border);
+    vertical-align: middle;
+}
+.mc-order-items-table tbody tr:last-child td { border-bottom: none; }
+
+.mc-order-totals {
+    margin-top: 16px;
+    border-top: 1.5px solid var(--mc-border);
+    padding-top: 16px;
+}
+.mc-order-totals tr td { padding: 6px 0; font-size: 14px; }
+.mc-order-totals tr td:first-child { color: var(--mc-secondary); width: 70%; }
+.mc-order-totals tr td:last-child { text-align: right; font-weight: 600; }
+.mc-order-totals tr.mc-totals-grand td { font-size: 16px; font-weight: 700; }
+
+/* Direcciones de pedido */
+.mc-order-addresses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.mc-address-block h4 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mc-secondary);
+    margin: 0 0 10px;
+}
+.mc-address-block address {
+    font-style: normal;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--vynk-dark);
+}
+
+/* Breadcrumb */
+.mc-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--mc-secondary);
+    margin-bottom: 20px;
+}
+.mc-breadcrumb a { color: var(--mc-secondary); text-decoration: none; }
+.mc-breadcrumb a:hover { color: var(--vynk-dark); }
+.mc-breadcrumb__sep { color: var(--mc-border); }
+.mc-breadcrumb__current { color: var(--vynk-dark); font-weight: 600; }
+
+/* ─────────────────────────────────────────────────────────────
+   FORMULARIOS (Perfil y Dirección)
+   ───────────────────────────────────────────────────────────── */
+.mc-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.mc-form-grid .mc-field--full { grid-column: 1 / -1; }
+
+.mc-field { margin-bottom: 0; }
+.mc-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--vynk-dark);
+    margin-bottom: 6px;
+}
+.mc-label .required { color: var(--vynk-accent); margin-left: 2px; }
+
+.mc-input,
+.mc-dashboard input[type="text"],
+.mc-dashboard input[type="email"],
+.mc-dashboard input[type="password"],
+.mc-dashboard input[type="tel"],
+.mc-dashboard input[type="number"],
+.mc-dashboard select,
+.mc-dashboard textarea {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--mc-input-bg);
+    border: 1.5px solid var(--mc-input-border);
+    border-radius: var(--vynk-r-input);
+    font-family: var(--vynk-font);
+    font-size: 14px;
+    color: var(--vynk-dark);
+    transition: border-color var(--vynk-transition), box-shadow var(--vynk-transition);
+    appearance: none;
+}
+.mc-dashboard input:focus,
+.mc-dashboard select:focus,
+.mc-dashboard textarea:focus {
+    border-color: var(--vynk-border-focus);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--vynk-accent-soft);
+}
+
+/* Override WC form rows dentro de mc-dashboard */
+.mc-dashboard .woocommerce-form-row,
+.mc-dashboard p.form-row {
+    padding: 0;
+    margin-bottom: 16px;
+}
+.mc-dashboard .woocommerce-form-row label,
+.mc-dashboard p.form-row label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--vynk-dark);
+    margin-bottom: 6px;
+    display: block;
+}
+.mc-dashboard .woocommerce-form-row input,
+.mc-dashboard p.form-row input,
+.mc-dashboard .woocommerce-form-row select,
+.mc-dashboard p.form-row select {
+    width: 100%;
+}
+
+/* Sección de contraseña */
+.mc-password-wrapper { position: relative; }
+.mc-password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--mc-secondary);
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+.mc-password-toggle:hover { color: var(--vynk-dark); }
+.mc-password-toggle svg { width: 18px; height: 18px; }
+
+/* Separador de sección en formularios */
+.mc-form-section {
+    margin-bottom: 28px;
+}
+.mc-form-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mc-secondary);
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--mc-border);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BOTONES
+   ───────────────────────────────────────────────────────────── */
+.mc-btn,
+.mc-dashboard button[type="submit"],
+.mc-dashboard input[type="submit"],
+.mc-dashboard .button,
+.mc-dashboard .woocommerce-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 24px;
+    border-radius: var(--vynk-r-btn);
+    font-family: var(--vynk-font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--vynk-transition), transform var(--vynk-transition), box-shadow var(--vynk-transition);
+    border: none;
+    white-space: nowrap;
+}
+.mc-btn--primary,
+.mc-dashboard button[type="submit"],
+.mc-dashboard input[type="submit"],
+.mc-dashboard .button.alt,
+.mc-dashboard .woocommerce-button.button.alt {
+    background: #333333;
+    color: #ffffff;
+}
+.mc-btn--primary:hover,
+.mc-dashboard button[type="submit"]:hover,
+.mc-dashboard input[type="submit"]:hover,
+.mc-dashboard .button.alt:hover {
+    background: var(--vynk-dark);
+    color: #fff;
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+.mc-btn--accent { background: var(--vynk-accent); color: #fff; }
+.mc-btn--accent:hover { background: var(--vynk-accent-dark); color: #fff; transform: translateY(-1px); }
+.mc-btn--outline {
+    background: transparent;
+    border: 1.5px solid var(--mc-border);
+    color: var(--vynk-dark);
+}
+.mc-btn--outline:hover { background: #f5f5f5; text-decoration: none; }
+.mc-btn--sm { padding: 7px 16px; font-size: 13px; }
+
+/* Botón regular dentro de dashboarsd (view, etc.) */
+.mc-dashboard .button:not(.alt),
+.mc-dashboard .woocommerce-button:not(.alt) {
+    background: transparent;
+    border: 1.5px solid var(--mc-border);
+    color: var(--vynk-dark);
+}
+.mc-dashboard .button:not(.alt):hover { background: #f5f5f5; }
+
+/* ─────────────────────────────────────────────────────────────
+   FORMULARIO DE LOGIN / REGISTRO
+   ───────────────────────────────────────────────────────────── */
+.mc-auth-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    min-height: 80vh;
+    align-content: center;
+    padding: 60px 24px;
+    font-family: var(--vynk-font);
+}
+.mc-auth-card {
+    background: var(--mc-card-bg);
+    border-radius: var(--vynk-r-card);
+    box-shadow: var(--vynk-shadow-sm);
+    border: 1.5px solid var(--mc-border);
+    padding: 36px 32px;
+    flex: 0 1 440px;
+    min-width: 300px;
+    width: 100%;
+}
+.mc-auth-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+    margin: 0 0 24px;
+}
+
+.mc-auth-card .woocommerce-form-row,
+.mc-auth-card p.form-row { margin-bottom: 16px; }
+.mc-auth-card .woocommerce-form-row label,
+.mc-auth-card p.form-row label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--vynk-dark);
+    margin-bottom: 6px;
+}
+.mc-auth-card .woocommerce-form-row input,
+.mc-auth-card p.form-row input {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--mc-input-bg);
+    border: 1.5px solid var(--mc-input-border);
+    border-radius: var(--vynk-r-input);
+    font-family: var(--vynk-font);
+    font-size: 14px;
+    color: var(--vynk-dark);
+    transition: border-color var(--vynk-transition);
+    box-sizing: border-box;
+}
+.mc-auth-card .woocommerce-form-row input:focus,
+.mc-auth-card p.form-row input:focus {
+    border-color: var(--vynk-border-focus);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--vynk-accent-soft);
+}
+
+.mc-auth-card .woocommerce-form__input-checkbox {
+    width: auto !important;
+    margin-right: 8px;
+}
+.mc-auth-card .woocommerce-form-row--remember label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.mc-auth-card button[type="submit"],
+.mc-auth-card input[type="submit"],
+.mc-auth-card .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border-radius: var(--vynk-r-btn);
+    font-family: var(--vynk-font);
+    font-size: 14px;
+    font-weight: 600;
+    background: #333333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background var(--vynk-transition);
+    width: 100%;
+    margin-top: 8px;
+}
+.mc-auth-card button[type="submit"]:hover,
+.mc-auth-card input[type="submit"]:hover,
+.mc-auth-card .button:hover { background: var(--vynk-dark); }
+
+.mc-auth-divider {
+    text-align: center;
+    margin: 16px 0;
+    font-size: 12px;
+    color: var(--mc-secondary);
+    position: relative;
+}
+.mc-auth-divider::before,
+.mc-auth-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: var(--mc-border);
+}
+.mc-auth-divider::before { left: 0; }
+.mc-auth-divider::after  { right: 0; }
+
+.mc-lost-password {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: var(--mc-secondary);
+    margin-top: 12px;
+    text-decoration: none;
+}
+.mc-lost-password:hover { color: var(--vynk-accent); }
+
+/* ─────────────────────────────────────────────────────────────
+   NOTICES (WooCommerce)
+   ───────────────────────────────────────────────────────────── */
+.mc-main .woocommerce-message,
+.mc-main .woocommerce-error,
+.mc-main .woocommerce-info {
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: var(--vynk-font);
+    display: flex !important;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+    border: none !important;
+    position: relative;
+}
+.mc-main .woocommerce-message::before { display: none; }
+.mc-main .woocommerce-message { background: rgba(16,185,129,0.1); color: #065f46; }
+.mc-main .woocommerce-error  { background: rgba(239,68,68,0.1);   color: #991b1b; }
+.mc-main .woocommerce-info   { background: rgba(59,130,246,0.1);  color: #1e40af; }
+
+.mc-notice-close {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+    padding: 0;
+}
+.mc-notice-close:hover { opacity: 1; }
+
+/* ─────────────────────────────────────────────────────────────
+   WOOCOMMERCE OVERRIDES (dentro del dashboard)
+   ───────────────────────────────────────────────────────────── */
+/* Ocultar la nav original de WooCommerce (la reemplazamos en navigation.php) */
+.mc-dashboard ul.woocommerce-MyAccount-navigation { display: none !important; }
+
+/* Reset del contenido de WC */
+.mc-dashboard .woocommerce-MyAccount-content {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+/* WC addresses */
+.mc-dashboard .woocommerce-Address { background: transparent; padding: 0; border: none; }
+.mc-dashboard .woocommerce-Address-title { display: none; }
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE — Tablet (≤ 1024px)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    :root { --mc-sidebar-width: 220px; }
+    .mc-main { padding: 28px 28px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE — Mobile (≤ 768px)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .mc-dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    /* Sidebar fuera de pantalla, se abre con toggle */
+    .mc-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        width: 280px;
+        transform: translateX(-100%);
+        z-index: 9999;
+        transition: transform var(--vynk-transition);
+    }
+    .mc-sidebar--open { transform: translateX(0); }
+
+    /* Mostrar topbar mobile, ocultar toggle en desktop */
+    .mc-mobile-topbar { display: flex; }
+
+    .mc-main { padding: 24px 16px 40px; }
+
+    .mc-stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .mc-auth-wrapper {
+        flex-direction: column;
+        padding: 32px 16px;
+        min-height: unset;
+    }
+    .mc-auth-card {
+        flex: 1 1 100%;
+        min-width: unset;
+    }
+
+    .mc-order-addresses { grid-template-columns: 1fr; }
+
+    .mc-form-grid { grid-template-columns: 1fr; }
+    .mc-form-grid .mc-field--full { grid-column: 1; }
+
+    .mc-card { padding: 20px; }
+
+    .mc-orders-table thead { display: none; }
+    .mc-orders-table tbody tr {
+        display: block;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--mc-border);
+    }
+    .mc-orders-table tbody td {
+        display: block;
+        padding: 3px 0;
+        border: none;
+    }
+    .mc-orders-table tbody td::before {
+        content: attr(data-label) ': ';
+        font-weight: 700;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--mc-secondary);
+        margin-right: 4px;
+    }
+
+    /* Address fields en mobile: 1 columna */
+    .mc-dashboard .woocommerce-address-fields__field-wrapper {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .mc-greeting { flex-direction: column; }
+    .mc-auth-card { padding: 24px 20px; }
+    .mc-stats-grid { grid-template-columns: 1fr; }
+}
+
+/* =============================================================
+   FIXES — GeneratePress + WooCommerce overrides
+   ============================================================= */
+
+/* ── FIX 1: Nav links — GeneratePress override con !important ── */
+.mc-nav__link,
+.mc-nav__link:visited,
+.mc-nav__link:link {
+    color: var(--mc-sidebar-text) !important;
+    text-decoration: none !important;
+}
+.mc-nav__link:hover {
+    color: #fff !important;
+    background: rgba(255,255,255,0.08) !important;
+    text-decoration: none !important;
+}
+.mc-nav__item.is-active .mc-nav__link,
+.mc-nav__item.is-active .mc-nav__link:visited {
+    color: #fff !important;
+    background: var(--mc-sidebar-active) !important;
+}
+
+/* ── FIX 2: Inputs de dirección — WC usa .input-text y .woocommerce-input-wrapper ── */
+.mc-dashboard .woocommerce-input-wrapper {
+    display: block !important;
+    width: 100% !important;
+}
+.mc-dashboard .input-text,
+.mc-dashboard input.input-text,
+.mc-dashboard select.country_select,
+.mc-dashboard select.state_select,
+.mc-dashboard .woocommerce-address-fields input,
+.mc-dashboard .woocommerce-address-fields select,
+.mc-dashboard .woocommerce-address-fields textarea,
+.mc-auth-card input.input-text,
+.mc-auth-card input[type="text"],
+.mc-auth-card input[type="email"],
+.mc-auth-card input[type="password"] {
+    width: 100% !important;
+    padding: 11px 14px !important;
+    background: var(--mc-input-bg) !important;
+    border: 1.5px solid var(--mc-input-border) !important;
+    border-radius: var(--vynk-r-input) !important;
+    font-family: var(--vynk-font) !important;
+    font-size: 14px !important;
+    color: var(--vynk-dark) !important;
+    box-shadow: none !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    transition: border-color var(--vynk-transition), box-shadow var(--vynk-transition) !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+.mc-dashboard .input-text:focus,
+.mc-dashboard input.input-text:focus,
+.mc-dashboard .woocommerce-address-fields input:focus,
+.mc-dashboard .woocommerce-address-fields select:focus,
+.mc-auth-card input.input-text:focus,
+.mc-auth-card input[type="text"]:focus,
+.mc-auth-card input[type="email"]:focus,
+.mc-auth-card input[type="password"]:focus {
+    border-color: var(--vynk-border-focus) !important;
+    box-shadow: 0 0 0 3px var(--vynk-accent-soft) !important;
+    outline: none !important;
+}
+
+/* Form rows de dirección */
+.mc-dashboard .woocommerce-address-fields .form-row,
+.mc-dashboard .woocommerce-address-fields p.form-row {
+    padding: 0 !important;
+    margin-bottom: 16px !important;
+    float: none !important;
+    width: 100% !important;
+    clear: both !important;
+}
+.mc-dashboard .woocommerce-address-fields .form-row label,
+.mc-dashboard .woocommerce-address-fields p.form-row label {
+    display: block !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--vynk-dark) !important;
+    margin-bottom: 6px !important;
+    font-family: var(--vynk-font) !important;
+}
+.mc-dashboard .woocommerce-address-fields__field-wrapper {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+}
+.mc-dashboard .woocommerce-address-fields__field-wrapper .form-row-wide {
+    grid-column: 1 / -1 !important;
+}
+
+/* ── FIX 3: Descargas — notice con icono mal posicionado ── */
+.mc-dashboard .woocommerce-info,
+.mc-main .woocommerce-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 14px 18px !important;
+    border-radius: 12px !important;
+    background: rgba(59,130,246,0.08) !important;
+    color: #1e40af !important;
+    border: none !important;
+    border-left: none !important;
+    font-size: 14px !important;
+    font-family: var(--vynk-font) !important;
+    margin-bottom: 16px !important;
+    position: relative !important;
+}
+/* Eliminar icono nativo de WC (usa font icon que descuadra) */
+.mc-dashboard .woocommerce-info::before,
+.mc-main .woocommerce-info::before,
+.mc-dashboard .woocommerce-info::after,
+.mc-main .woocommerce-info::after {
+    display: none !important;
+    content: none !important;
+}
+.mc-dashboard .woocommerce-info a.button,
+.mc-dashboard .woocommerce-info .button {
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+    background: #1e40af !important;
+    color: #fff !important;
+    padding: 6px 14px !important;
+    border-radius: 50px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    border: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+.mc-dashboard .woocommerce-info a.button:hover {
+    background: #1e3a8a !important;
+}
+/* Tabla de descargas */
+.mc-dashboard .woocommerce-MyAccount-downloads {
+    font-family: var(--vynk-font);
+    font-size: 14px;
+}
+.mc-dashboard .woocommerce-MyAccount-downloads table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.mc-dashboard .woocommerce-MyAccount-downloads table th {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--mc-secondary);
+    padding: 10px 14px;
+    border-bottom: 1.5px solid var(--mc-border);
+    text-align: left;
+}
+.mc-dashboard .woocommerce-MyAccount-downloads table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--mc-border);
+    color: var(--vynk-dark);
+}
+
+/* ── FIX 4: Botones — forzar colores con !important ── */
+/* Estado normal: fondo oscuro, texto blanco */
+.mc-dashboard button[type="submit"],
+.mc-dashboard input[type="submit"],
+.mc-dashboard .woocommerce-Button,
+.mc-btn--primary,
+.mc-auth-card button[type="submit"],
+.mc-auth-card input[type="submit"] {
+    background: #333333 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+/* Hover: rojo con sombra */
+.mc-dashboard button[type="submit"]:hover,
+.mc-dashboard input[type="submit"]:hover,
+.mc-dashboard .woocommerce-Button:hover,
+.mc-btn--primary:hover,
+.mc-auth-card button[type="submit"]:hover,
+.mc-auth-card input[type="submit"]:hover {
+    background: var(--vynk-accent) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(191,31,31,0.25) !important;
+    text-decoration: none !important;
+}
+/* Outline → borde rojo al hover */
+.mc-btn--outline:hover {
+    background: var(--vynk-accent-soft) !important;
+    border-color: var(--vynk-accent) !important;
+    color: var(--vynk-accent) !important;
+    text-decoration: none !important;
+}
+/* Botones WC regulares (view order, etc.) */
+.mc-dashboard .button:not([type="submit"]),
+.mc-dashboard a.button {
+    background: transparent !important;
+    border: 1.5px solid var(--mc-border) !important;
+    color: var(--vynk-dark) !important;
+}
+.mc-dashboard .button:not([type="submit"]):hover,
+.mc-dashboard a.button:hover {
+    background: var(--vynk-accent-soft) !important;
+    border-color: var(--vynk-accent) !important;
+    color: var(--vynk-accent) !important;
+    text-decoration: none !important;
+}
+/* Accent */
+.mc-btn--accent { background: var(--vynk-accent) !important; color: #fff !important; }
+.mc-btn--accent:hover {
+    background: var(--vynk-accent-dark) !important;
+    box-shadow: 0 4px 12px rgba(191,31,31,0.35) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ── FIX 5: Inputs — especificidad máxima con body prefix ── */
+body.mi-cuenta-active .mc-dashboard input[type="text"],
+body.mi-cuenta-active .mc-dashboard input[type="email"],
+body.mi-cuenta-active .mc-dashboard input[type="password"],
+body.mi-cuenta-active .mc-dashboard input[type="tel"],
+body.mi-cuenta-active .mc-dashboard input[type="number"],
+body.mi-cuenta-active .mc-dashboard input[type="url"],
+body.mi-cuenta-active .mc-dashboard input.input-text,
+body.mi-cuenta-active .mc-dashboard select,
+body.mi-cuenta-active .mc-dashboard textarea,
+body.mi-cuenta-active .mc-auth-card input[type="text"],
+body.mi-cuenta-active .mc-auth-card input[type="email"],
+body.mi-cuenta-active .mc-auth-card input[type="password"],
+body.mi-cuenta-active .mc-auth-card input.input-text,
+body.mi-cuenta-active .mc-auth-card input {
+    width: 100% !important;
+    padding: 11px 14px !important;
+    background: #f8f9fa !important;
+    border: 1.5px solid #dde1e7 !important;
+    border-radius: 14px !important;
+    font-family: 'Barlow', -apple-system, sans-serif !important;
+    font-size: 14px !important;
+    color: #1a1a1a !important;
+    box-shadow: none !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    transition: border-color 0.22s ease, box-shadow 0.22s ease !important;
+}
+body.mi-cuenta-active .mc-dashboard input:focus,
+body.mi-cuenta-active .mc-dashboard select:focus,
+body.mi-cuenta-active .mc-dashboard textarea:focus,
+body.mi-cuenta-active .mc-auth-card input:focus {
+    border-color: #bf1f1f !important;
+    box-shadow: 0 0 0 3px rgba(191,31,31,0.08) !important;
+    outline: none !important;
+    background: #fff !important;
+}
+/* Checkbox: NO aplicar estilos de input de texto */
+body.mi-cuenta-active .mc-auth-card input[type="checkbox"],
+body.mi-cuenta-active .mc-dashboard input[type="checkbox"],
+body.mi-cuenta-active .mc-dashboard input[type="radio"] {
+    width: auto !important;
+    padding: 0 !important;
+    border-radius: 4px !important;
+    background: none !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+}
+body.mi-cuenta-active .mc-dashboard .woocommerce-input-wrapper,
+body.mi-cuenta-active .mc-dashboard span.woocommerce-input-wrapper {
+    display: block !important;
+    width: 100% !important;
+}
+
+/* ── FIX 6: Login form — centrado ── */
+.mc-auth-card label {
+    display: block !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--vynk-dark) !important;
+    margin-bottom: 6px !important;
+    font-family: var(--vynk-font) !important;
+}
+.mc-auth-card .woocommerce-form__input-checkbox,
+.mc-auth-card input[type="checkbox"] {
+    width: auto !important;
+    padding: 0 !important;
+    border-radius: 4px !important;
+    margin-right: 8px !important;
+    flex-shrink: 0 !important;
+}
+.mc-auth-card .woocommerce-form-row--remember label {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    cursor: pointer !important;
+    margin-bottom: 0 !important;
+}

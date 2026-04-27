@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:vynk.us)",
+      "mcp__claude_ai_Vercel__web_fetch_vercel_url"
+    ]
+  }
+}

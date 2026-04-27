@@ -1,0 +1,248 @@
+/* ============================================================
+   Product Weight & Dimensions Audit — Admin Styles
+   ============================================================ */
+
+.pwa-wrap {
+    max-width: 1400px;
+}
+
+/* ---- Summary cards ---- */
+.pwa-summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 20px 0 24px;
+}
+
+.pwa-summary__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,.1);
+    border-top: 4px solid transparent;
+}
+
+.pwa-summary__card--complete { border-color: #46b450; }
+.pwa-summary__card--partial  { border-color: #ffb900; }
+.pwa-summary__card--empty    { border-color: #dc3232; }
+.pwa-summary__card--total    { border-color: #0073aa; }
+
+.pwa-summary__number {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.pwa-summary__card--complete .pwa-summary__number { color: #46b450; }
+.pwa-summary__card--partial  .pwa-summary__number { color: #ffb900; }
+.pwa-summary__card--empty    .pwa-summary__number { color: #dc3232; }
+.pwa-summary__card--total    .pwa-summary__number { color: #0073aa; }
+
+.pwa-summary__label {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.pwa-progress-wrap {
+    flex: 1;
+    min-width: 200px;
+}
+
+.pwa-progress-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+.pwa-progress-bar {
+    height: 12px;
+    background: #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.pwa-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #46b450, #00a32a);
+    border-radius: 6px;
+    transition: width .4s ease;
+    min-width: 4px;
+}
+
+/* ---- Toolbar ---- */
+.pwa-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+/* ---- Filter tabs ---- */
+.pwa-filter-tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.pwa-tab {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #444;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    transition: background .15s, color .15s;
+}
+
+.pwa-tab:hover {
+    background: #e0e0e0;
+    color: #222;
+}
+
+.pwa-tab--active,
+.pwa-tab--active:hover {
+    background: #0073aa;
+    color: #fff;
+    border-color: #0073aa;
+}
+
+.pwa-tab--complete.pwa-tab--active { background: #46b450; border-color: #46b450; }
+.pwa-tab--partial.pwa-tab--active  { background: #ffb900; border-color: #ffb900; color: #333; }
+.pwa-tab--empty.pwa-tab--active    { background: #dc3232; border-color: #dc3232; }
+
+.pwa-tab-count {
+    opacity: .8;
+    font-size: 11px;
+}
+
+/* ---- Search ---- */
+.pwa-search-wrap {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.pwa-search-input {
+    width: 260px;
+    max-width: 100%;
+}
+
+/* ---- Export button ---- */
+.pwa-export-btn {
+    background: #46b450 !important;
+    color: #fff !important;
+    border-color: #3a9a43 !important;
+}
+
+.pwa-export-btn:hover {
+    background: #3a9a43 !important;
+}
+
+/* ---- Table ---- */
+.pwa-table th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.pwa-table .col-name   { width: 30%; }
+.pwa-table .col-sku    { width: 10%; }
+.pwa-table .col-type   { width: 8%; }
+.pwa-table .col-weight { width: 8%; }
+.pwa-table .col-dim    { width: 8%; }
+.pwa-table .col-status { width: 9%; }
+.pwa-table .col-actions{ width: 7%; }
+
+.pwa-has {
+    color: #46b450;
+    font-weight: 600;
+}
+
+.pwa-missing {
+    color: #bbb;
+    font-style: italic;
+}
+
+/* row accent */
+.pwa-row--empty td:first-child {
+    border-left: 3px solid #dc3232;
+}
+.pwa-row--partial td:first-child {
+    border-left: 3px solid #ffb900;
+}
+.pwa-row--complete td:first-child {
+    border-left: 3px solid #46b450;
+}
+
+/* ---- Badges ---- */
+.pwa-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.pwa-badge--complete { background: #edfaee; color: #2a7a2e; }
+.pwa-badge--partial  { background: #fff8e1; color: #8a6000; }
+.pwa-badge--empty    { background: #fdecea; color: #a00; }
+
+/* ---- Empty state ---- */
+.pwa-empty {
+    padding: 40px;
+    text-align: center;
+    color: #777;
+    font-size: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-top: 12px;
+}
+
+/* ---- Pagination ---- */
+.pwa-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.pwa-pagination__info {
+    color: #666;
+    font-size: 13px;
+}
+
+.pwa-pagination__links {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.pwa-pagination__links .button {
+    min-width: 36px;
+    text-align: center;
+}
+
+.pwa-pagination__links .pwa-page--active {
+    background: #0073aa;
+    color: #fff;
+    border-color: #0073aa;
+    pointer-events: none;
+}

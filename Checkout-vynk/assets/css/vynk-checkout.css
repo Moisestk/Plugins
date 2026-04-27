@@ -1,0 +1,1507 @@
+/* =============================================================
+   Vynk Checkout & Cart — Design System
+   ============================================================= */
+
+:root {
+    --vynk-accent:         #bf1f1f;
+    --vynk-accent-dark:    #a01818;
+    --vynk-accent-soft:    rgba(191,31,31,0.08);
+    --vynk-dark:           #1a1a1a;
+    --vynk-bg:             #ffffff;
+    --vynk-bg-page:        #f4f4f6;
+    --vynk-bg-input:       #f8f9fa;
+    --vynk-border:         #ebebeb;
+    --vynk-border-focus:   #bf1f1f;
+    --vynk-secondary:      #6b7280;
+    --vynk-success:        #10B981;
+    --vynk-font:           'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --vynk-r-card:         20px;
+    --vynk-r-input:        14px;
+    --vynk-r-btn:          50px;
+    --vynk-shadow-sm:      0 2px 8px rgba(0,0,0,0.07);
+    --vynk-shadow:         0 4px 16px rgba(0,0,0,0.10);
+    --vynk-transition:     0.22s ease;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+.vynk-checkout-wrapper *,
+.vynk-checkout-wrapper *::before,
+.vynk-checkout-wrapper *::after,
+.vynk-cart-wrapper *,
+.vynk-cart-wrapper *::before,
+.vynk-cart-wrapper *::after { box-sizing: border-box; }
+
+.vynk-checkout-wrapper,
+.vynk-cart-wrapper {
+    font-family: var(--vynk-font);
+    color: var(--vynk-dark);
+    /* Prevent horizontal overflow on mobile */
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+/* Ensure images and media never overflow their containers */
+.vynk-checkout-wrapper img,
+.vynk-cart-wrapper img,
+.vynk-checkout-wrapper video,
+.vynk-cart-wrapper video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ── Checkout Layout ──────────────────────────────────────── */
+.vynk-checkout-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 28px;
+    align-items: start;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 16px 60px;
+}
+
+.vynk-checkout-main  { display: flex; flex-direction: column; gap: 12px; }
+.vynk-checkout-sidebar { position: sticky; top: 20px; align-self: start; }
+
+/* ── Branding ─────────────────────────────────────────────── */
+.vynk-checkout-branding {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    grid-column: 1 / -1;
+}
+.vynk-checkout-logo img { max-height: 48px; }
+.vynk-checkout-page-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--vynk-dark);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACCORDION CARDS
+   ═══════════════════════════════════════════════════════════ */
+.vynk-accordion-card {
+    background: var(--vynk-bg) !important;
+    border: 1.5px solid var(--vynk-border) !important;
+    border-radius: var(--vynk-r-card) !important;
+    box-shadow: var(--vynk-shadow-sm) !important;
+    overflow: hidden !important;
+    transition: box-shadow var(--vynk-transition);
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.vynk-accordion-card.is-open {
+    box-shadow: var(--vynk-shadow);
+    border-color: rgba(191,31,31,0.2);
+}
+
+/* Header trigger — aggressively override theme button styles */
+.vynk-accordion-header,
+.vynk-accordion-header:hover,
+.vynk-accordion-header:focus,
+.vynk-accordion-header:active,
+.vynk-accordion-card .vynk-accordion-header,
+.vynk-accordion-card.is-open .vynk-accordion-header {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 18px 20px !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    cursor: pointer !important;
+    text-align: left !important;
+    font-family: var(--vynk-font) !important;
+    color: #1a1a1a !important;
+    outline: none !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    line-height: 1.4 !important;
+    transition: background-color 0.22s ease !important;
+}
+.vynk-accordion-header:hover,
+.vynk-accordion-card .vynk-accordion-header:hover {
+    background: #f8f9fa !important;
+    background-color: #f8f9fa !important;
+}
+
+.vynk-step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--vynk-accent-soft);
+    color: var(--vynk-accent);
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: background var(--vynk-transition), color var(--vynk-transition);
+}
+
+.vynk-accordion-card.is-open .vynk-step-num {
+    background: var(--vynk-accent);
+    color: #fff;
+}
+
+/* Completed step: filled check */
+.vynk-accordion-card.is-done .vynk-step-num {
+    background: var(--vynk-success);
+    color: #fff;
+}
+
+.vynk-accordion-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+    flex: 1;
+}
+
+.vynk-accordion-title svg { color: var(--vynk-accent); flex-shrink: 0; }
+
+.vynk-accordion-summary {
+    font-size: 12px;
+    color: var(--vynk-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.vynk-chevron {
+    color: var(--vynk-secondary);
+    flex-shrink: 0;
+    transition: transform var(--vynk-transition);
+}
+.vynk-accordion-card.is-open .vynk-chevron { transform: rotate(180deg); }
+
+/* Payment secure badge */
+.vynk-payment-secure-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--vynk-success);
+    background: rgba(16,185,129,0.09);
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+/* Accordion body */
+.vynk-accordion-body {
+    padding: 0 20px 20px;
+    display: none;
+}
+.vynk-accordion-card.is-open .vynk-accordion-body { display: block; }
+
+/* ═══════════════════════════════════════════════════════════
+   FORM FIELDS
+   ═══════════════════════════════════════════════════════════ */
+.vynk-checkout-wrapper .form-row { margin-bottom: 12px; }
+
+.vynk-checkout-wrapper .form-row label,
+.vynk-cf-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--vynk-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 6px;
+}
+
+.vynk-checkout-wrapper .required { color: var(--vynk-accent); }
+
+/* All inputs — !important to override theme styles */
+.vynk-checkout-wrapper input[type="text"],
+.vynk-checkout-wrapper input[type="email"],
+.vynk-checkout-wrapper input[type="tel"],
+.vynk-checkout-wrapper input[type="number"],
+.vynk-checkout-wrapper input[type="password"],
+.vynk-checkout-wrapper select,
+.vynk-checkout-wrapper textarea,
+.vynk-cf-input {
+    width: 100% !important;
+    background: #f8f9fa !important;
+    background-color: #f8f9fa !important;
+    border: 1.5px solid #ebebeb !important;
+    border-radius: 14px !important;
+    padding: 13px 16px !important;
+    font-family: var(--vynk-font) !important;
+    font-size: 15px !important;
+    color: #1a1a1a !important;
+    transition: border-color 0.22s ease, box-shadow 0.22s ease !important;
+    outline: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    box-shadow: none !important;
+}
+
+.vynk-checkout-wrapper input:focus,
+.vynk-checkout-wrapper select:focus,
+.vynk-checkout-wrapper textarea:focus,
+.vynk-cf-input:focus {
+    border-color: var(--vynk-border-focus);
+    box-shadow: 0 0 0 3px rgba(191,31,31,0.12);
+    background: #fff;
+}
+
+/* Select arrow */
+.vynk-checkout-wrapper select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+}
+
+/* Half-width WC fields */
+.vynk-checkout-wrapper .form-row-first,
+.vynk-checkout-wrapper .form-row-last {
+    width: calc(50% - 6px);
+    display: inline-block;
+    vertical-align: top;
+}
+.vynk-checkout-wrapper .form-row-first { margin-right: 12px; }
+
+/* ── Ship to different address toggle ─────────────────────── */
+.vynk-ship-diff-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 0;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--vynk-dark);
+    border-bottom: 1px solid var(--vynk-border);
+    margin-bottom: 16px;
+}
+
+.vynk-toggle-switch-inline {
+    position: relative;
+    width: 42px;
+    height: 23px;
+    flex-shrink: 0;
+}
+.vynk-toggle-switch-inline input { opacity:0; width:0; height:0; position:absolute; }
+.vynk-toggle-switch-inline .vynk-toggle-slider {
+    position: absolute; inset: 0;
+    background: #d1d5db;
+    border-radius: 23px;
+    cursor: pointer;
+    transition: background var(--vynk-transition);
+}
+.vynk-toggle-switch-inline .vynk-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 17px; height: 17px;
+    background: #fff;
+    border-radius: 50%;
+    top: 3px; left: 3px;
+    transition: transform var(--vynk-transition);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.vynk-toggle-switch-inline input:checked ~ .vynk-toggle-slider { background: var(--vynk-accent); }
+.vynk-toggle-switch-inline input:checked ~ .vynk-toggle-slider::before { transform: translateX(19px); }
+
+/* ═══════════════════════════════════════════════════════════
+   SHIPPING METHODS — Simple list style
+   ═══════════════════════════════════════════════════════════ */
+.vynk-shipping-cards-wrap .woocommerce-shipping-methods {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column; gap: 0;
+}
+.vynk-shipping-cards-wrap .woocommerce-shipping-methods li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 4px;
+    border-bottom: 1px solid var(--vynk-border);
+    cursor: pointer;
+    transition: background var(--vynk-transition);
+    border-radius: 0;
+}
+.vynk-shipping-cards-wrap .woocommerce-shipping-methods li:last-child {
+    border-bottom: none;
+}
+.vynk-shipping-cards-wrap .woocommerce-shipping-methods li:hover {
+    background: var(--vynk-accent-soft);
+    border-radius: 8px;
+}
+.vynk-shipping-cards-wrap .woocommerce-shipping-methods li.vynk-shipping-selected {
+    background: var(--vynk-accent-soft);
+    border-radius: 8px;
+}
+.vynk-shipping-cards-wrap .woocommerce-shipping-methods input[type="radio"] {
+    width: 16px; height: 16px;
+    accent-color: var(--vynk-accent); flex-shrink: 0;
+    cursor: pointer;
+}
+.vynk-shipping-cards-wrap .woocommerce-shipping-methods label {
+    margin: 0; font-size: 14px; font-weight: 500;
+    color: var(--vynk-dark); cursor: pointer; flex: 1;
+}
+
+/* Shipping address fields inside step 1 — inherit accordion form styles */
+.vynk-shipping-address-fields .form-row {
+    margin-bottom: 12px;
+}
+
+/* País fijo: Venezuela (texto estático, mismo aspecto que un input) */
+.vynk-country-fixed-value {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--vynk-bg-input);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: var(--vynk-r-input);
+    color: var(--vynk-secondary);
+    font-family: var(--vynk-font);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* Divider between address fields and method selection */
+.vynk-shipping-section-divider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--vynk-secondary);
+}
+.vynk-shipping-section-divider svg {
+    color: var(--vynk-accent);
+    flex-shrink: 0;
+}
+.vynk-shipping-section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--vynk-border);
+}
+
+.vynk-shipping-placeholder {
+    font-size: 13px; color: var(--vynk-secondary);
+    text-align: center; padding: 14px 0; margin: 0;
+}
+
+/* "Por definir" label shown in totals when no shipping zone matches yet */
+.vynk-shipping-pending {
+    font-style: normal;
+    font-size: 12px;
+    color: var(--vynk-secondary);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAYMENT — WooCommerce gateway block
+   ═══════════════════════════════════════════════════════════ */
+.vynk-checkout-wrapper #payment {
+    background: transparent; border: none; padding: 0; margin: 0;
+}
+
+.vynk-checkout-wrapper #payment ul.payment_methods {
+    list-style: none; margin: 0 0 16px; padding: 0;
+    display: flex; flex-direction: column; gap: 8px;
+}
+
+.vynk-checkout-wrapper #payment ul.payment_methods li {
+    background: var(--vynk-bg-input);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: var(--vynk-r-input);
+    padding: 14px 16px;
+    transition: border-color var(--vynk-transition), background var(--vynk-transition);
+    cursor: pointer;
+}
+.vynk-checkout-wrapper #payment ul.payment_methods li:hover,
+.vynk-checkout-wrapper #payment ul.payment_methods li.payment_method_selected {
+    border-color: var(--vynk-accent);
+    background: var(--vynk-accent-soft);
+}
+
+.vynk-checkout-wrapper #payment ul.payment_methods label {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 600;
+    color: var(--vynk-dark); cursor: pointer; margin: 0;
+}
+.vynk-checkout-wrapper #payment ul.payment_methods input[type="radio"] {
+    width: 17px; height: 17px;
+    accent-color: var(--vynk-accent); flex-shrink: 0;
+}
+.vynk-checkout-wrapper #payment ul.payment_methods img {
+    max-height: 22px; max-width: 56px;
+    object-fit: contain; margin-left: auto;
+}
+
+/* Gateway payment fields box */
+.vynk-checkout-wrapper #payment .payment_box {
+    background: transparent; border: none;
+    padding: 12px 0 4px; font-size: 14px;
+    color: var(--vynk-secondary); font-family: var(--vynk-font);
+}
+.vynk-checkout-wrapper #payment .payment_box::before { display: none; }
+
+/* Place Order button */
+.vynk-checkout-wrapper #payment #place_order,
+#place_order {
+    display: block; width: 100%;
+    background: var(--vynk-accent);
+    color: #fff; border: none;
+    border-radius: var(--vynk-r-btn);
+    padding: 16px 28px;
+    font-family: var(--vynk-font);
+    font-size: 15px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    cursor: pointer;
+    transition: background var(--vynk-transition), transform var(--vynk-transition), box-shadow var(--vynk-transition);
+    margin-top: 18px;
+}
+.vynk-checkout-wrapper #payment #place_order:hover,
+#place_order:hover {
+    background: var(--vynk-accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(191,31,31,0.28);
+}
+.vynk-checkout-wrapper #payment #place_order:active,
+#place_order:active { transform: translateY(0); }
+
+/* Terms */
+.vynk-checkout-wrapper .woocommerce-terms-and-conditions-wrapper {
+    margin-top: 14px; font-size: 13px; color: var(--vynk-secondary);
+}
+.vynk-checkout-wrapper .woocommerce-terms-and-conditions-wrapper a {
+    color: var(--vynk-accent); text-decoration: underline;
+}
+
+/* ─── Mock gateway card fields ────────────────────────────── */
+.vynk-card-fields { margin-top: 4px; }
+
+.vynk-card-brands {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+}
+
+.vynk-cf-row { margin-bottom: 12px; }
+.vynk-cf-row:last-child { margin-bottom: 0; }
+
+.vynk-cf-row-2col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+
+.vynk-cf-input-wrap { position: relative; }
+.vynk-cf-input-wrap .vynk-cf-input { padding-right: 42px; }
+.vynk-cf-icon {
+    position: absolute; right: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--vynk-secondary); pointer-events: none;
+}
+
+.vynk-card-number-input { letter-spacing: 2px; }
+
+.vynk-cf-note {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: var(--vynk-secondary);
+    margin: 10px 0 0;
+}
+.vynk-cf-note svg { color: var(--vynk-success); flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════════════════
+   ORDER SUMMARY SIDEBAR
+   ═══════════════════════════════════════════════════════════ */
+.vynk-summary-card {
+    background: var(--vynk-bg);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: var(--vynk-r-card);
+    box-shadow: var(--vynk-shadow-sm);
+    overflow: hidden;
+}
+
+.vynk-summary-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--vynk-border);
+}
+.vynk-summary-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 15px; font-weight: 700; color: var(--vynk-dark);
+}
+.vynk-summary-title svg { color: var(--vynk-accent); }
+.vynk-cart-count {
+    font-size: 11px; font-weight: 600; color: var(--vynk-secondary);
+    background: var(--vynk-bg-input);
+    border: 1px solid var(--vynk-border);
+    padding: 3px 9px; border-radius: 20px;
+}
+
+/* Items */
+.vynk-summary-items {
+    padding: 14px 20px;
+    display: flex; flex-direction: column; gap: 12px;
+    border-bottom: 1px solid var(--vynk-border);
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.vynk-summary-item {
+    display: flex; align-items: flex-start; gap: 10px;
+}
+.vynk-summary-item-img {
+    position: relative; flex-shrink: 0;
+}
+.vynk-summary-item-img img {
+    width: 54px; height: 54px;
+    object-fit: cover; border-radius: 10px;
+    border: 1.5px solid var(--vynk-border); display: block;
+}
+.vynk-item-qty-badge {
+    position: absolute; top: -6px; right: -6px;
+    background: var(--vynk-accent); color: #fff;
+    font-size: 10px; font-weight: 700;
+    width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--vynk-font);
+}
+.vynk-summary-item-info { flex: 1; min-width: 0; }
+.vynk-summary-item-name {
+    display: block; font-size: 13px; font-weight: 600;
+    color: var(--vynk-dark); line-height: 1.35; margin-bottom: 2px;
+}
+.vynk-summary-item-info dl.variation { font-size: 11px; color: var(--vynk-secondary); margin: 0; }
+.vynk-summary-item-price {
+    font-size: 13px; font-weight: 700;
+    color: var(--vynk-dark); white-space: nowrap; flex-shrink: 0;
+}
+
+/* ── Sidebar Shipping Methods Section ────────────────────── */
+.vynk-sidebar-shipping {
+    border-top: 1px solid var(--vynk-border);
+    padding: 14px 20px;
+}
+
+.vynk-sidebar-shipping-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--vynk-secondary);
+    margin-bottom: 10px;
+}
+.vynk-sidebar-shipping-header svg { color: var(--vynk-accent); flex-shrink: 0; }
+
+/* Shipping methods inside sidebar — compact version */
+.vynk-sidebar-shipping .woocommerce-shipping-methods {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+}
+.vynk-sidebar-shipping .woocommerce-shipping-methods li {
+    background: var(--vynk-bg-input) !important;
+    border: 1.5px solid var(--vynk-border) !important;
+    border-radius: 12px !important;
+    padding: 11px 14px !important;
+    cursor: pointer !important;
+    transition: border-color 0.22s ease, background 0.22s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 9px !important;
+}
+.vynk-sidebar-shipping .woocommerce-shipping-methods li:has(input:checked),
+.vynk-sidebar-shipping .woocommerce-shipping-methods li.vynk-shipping-selected {
+    border-color: var(--vynk-accent) !important;
+    background: rgba(191,31,31,0.05) !important;
+}
+.vynk-sidebar-shipping .woocommerce-shipping-methods input[type="radio"] {
+    width: 16px !important; height: 16px !important;
+    accent-color: var(--vynk-accent) !important; flex-shrink: 0 !important;
+}
+.vynk-sidebar-shipping .woocommerce-shipping-methods label {
+    margin: 0 !important; font-size: 13px !important;
+    font-weight: 500 !important; color: var(--vynk-dark) !important;
+    cursor: pointer !important; flex: 1 !important;
+    font-family: var(--vynk-font) !important;
+}
+
+/* Coupon area */
+.vynk-coupon-area {
+    padding: 4px 20px 16px;
+    border-bottom: 1px solid var(--vynk-border);
+}
+.vynk-coupon-toggle-btn {
+    width: 100%;
+    display: flex; align-items: center; gap: 8px;
+    background: var(--vynk-bg-input);
+    border: 1.5px dashed var(--vynk-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: var(--vynk-font); font-size: 13px; font-weight: 500;
+    color: var(--vynk-secondary); cursor: pointer;
+    transition: border-color var(--vynk-transition), color var(--vynk-transition), background var(--vynk-transition);
+    text-align: left;
+}
+.vynk-coupon-toggle-btn svg { flex-shrink: 0; }
+.vynk-coupon-toggle-btn span { flex: 1; }
+.vynk-coupon-chevron {
+    transition: transform var(--vynk-transition);
+    margin-left: auto;
+    flex-shrink: 0;
+}
+.vynk-coupon-toggle-btn:hover {
+    border-color: var(--vynk-accent);
+    color: var(--vynk-accent);
+    background: rgba(191,31,31,0.03);
+}
+.vynk-coupon-open .vynk-coupon-toggle-btn {
+    border-color: var(--vynk-accent);
+    color: var(--vynk-accent);
+    background: rgba(191,31,31,0.04);
+    border-style: solid;
+}
+.vynk-coupon-open .vynk-coupon-chevron { transform: rotate(180deg); }
+
+/* Coupon form — custom implementation (no nested <form>) */
+#vynk-coupon-form { padding-top: 10px; }
+.vynk-coupon-inner { display: flex; flex-direction: column; gap: 6px; }
+.vynk-coupon-row {
+    display: flex;
+    background: var(--vynk-bg-input);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color var(--vynk-transition);
+}
+.vynk-coupon-row:focus-within { border-color: var(--vynk-accent); }
+.vynk-coupon-input {
+    flex: 1;
+    background: transparent;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 11px 14px;
+    font-family: var(--vynk-font); font-size: 13.5px;
+    color: var(--vynk-dark);
+    outline: none !important;
+    box-shadow: none !important;
+    min-width: 0;
+}
+.vynk-coupon-input::placeholder { color: #aaa; }
+.vynk-coupon-btn {
+    background: var(--vynk-accent); color: #fff;
+    border: none; border-radius: 0 10px 10px 0;
+    padding: 0 18px;
+    font-family: var(--vynk-font); font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    cursor: pointer; white-space: nowrap;
+    transition: background var(--vynk-transition);
+}
+.vynk-coupon-btn:hover { background: var(--vynk-accent-dark); }
+.vynk-coupon-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+#vynk-coupon-msg { font-size: 12.5px; font-family: var(--vynk-font); }
+#vynk-coupon-msg:empty { display: none; }
+.vynk-coupon-msg--ok    { color: var(--vynk-success); }
+.vynk-coupon-msg--error { color: var(--vynk-accent); }
+#vynk-coupon-msg ul, #vynk-coupon-msg li { list-style: none; margin: 0; padding: 0; }
+
+/* Totals */
+.vynk-summary-totals {
+    padding: 14px 20px;
+    display: flex; flex-direction: column; gap: 9px;
+}
+.vynk-totals-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; color: var(--vynk-secondary);
+    min-width: 0; gap: 8px;
+}
+/* Prevent long labels from pushing the price out of view */
+.vynk-totals-row span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vynk-totals-row span:last-child  { font-weight: 600; color: var(--vynk-dark); flex-shrink: 0; white-space: nowrap; }
+.vynk-totals-discount { color: var(--vynk-success) !important; }
+.vynk-discount { color: var(--vynk-success) !important; }
+.vynk-totals-grand {
+    padding-top: 12px;
+    border-top: 2px solid var(--vynk-border);
+    font-size: 16px; font-weight: 700; color: var(--vynk-dark) !important;
+    margin-top: 4px;
+}
+.vynk-totals-grand span { font-size: 18px; font-weight: 700; color: var(--vynk-dark) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   WC OVERRIDES
+   ═══════════════════════════════════════════════════════════ */
+.vynk-checkout-wrapper .col2-set { display: block; width: 100%; float: none; }
+.vynk-checkout-wrapper .col2-set .col-1,
+.vynk-checkout-wrapper .col2-set .col-2 { width: 100%; float: none; }
+
+/* ── Suppress WC's bulk error block — replaced by inline errors ── */
+.woocommerce-checkout .woocommerce-NoticeGroup-checkout {
+    display: none !important;
+}
+
+/* ── Notices wrapper inside the main column (coupon, etc.) ──────── */
+.vynk-checkout-main .woocommerce-notices-wrapper:not(:empty) {
+    margin-bottom: 12px;
+}
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-error,
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-message,
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-info {
+    list-style: none;
+    margin: 0;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-family: var(--vynk-font);
+    font-size: 13.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-error {
+    background: rgba(191,31,31,0.07);
+    color: var(--vynk-accent);
+    border: 1px solid rgba(191,31,31,0.18);
+}
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-message {
+    background: rgba(16,185,129,0.08);
+    color: #065f46;
+    border: 1px solid rgba(16,185,129,0.22);
+}
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-info {
+    background: rgba(59,130,246,0.07);
+    color: #1e40af;
+    border: 1px solid rgba(59,130,246,0.18);
+}
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-error li,
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-message li,
+.vynk-checkout-main .woocommerce-notices-wrapper .woocommerce-info li {
+    margin: 0; padding: 0;
+}
+
+/* ── Inline field error message ────────────────────────────────── */
+.vynk-field-error {
+    display: block;
+    color: var(--vynk-accent);
+    font-size: 11.5px;
+    font-weight: 500;
+    margin-top: 5px;
+    padding-left: 2px;
+    font-family: var(--vynk-font);
+    animation: vynkFadeIn 0.18s ease;
+}
+@keyframes vynkFadeIn {
+    from { opacity: 0; transform: translateY(-3px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.vynk-checkout-wrapper .woocommerce-invalid input,
+.vynk-checkout-wrapper .woocommerce-invalid select,
+.vynk-checkout-wrapper .woocommerce-invalid textarea {
+    border-color: var(--vynk-accent) !important;
+    background: rgba(191,31,31,0.03) !important;
+}
+.vynk-checkout-wrapper .blockUI.blockOverlay {
+    border-radius: var(--vynk-r-card);
+    background: rgba(255,255,255,0.8) !important;
+    backdrop-filter: blur(4px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CART PAGE
+   ═══════════════════════════════════════════════════════════ */
+.vynk-cart-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 28px;
+    align-items: start;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+}
+
+.vynk-cart-main { display: flex; flex-direction: column; gap: 12px; }
+.vynk-cart-sidebar { position: sticky; top: 90px; }
+
+.vynk-cart-card {
+    background: var(--vynk-bg);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: var(--vynk-r-card);
+    box-shadow: var(--vynk-shadow-sm);
+    overflow: hidden;
+}
+
+.vynk-cart-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--vynk-border);
+}
+.vynk-cart-card-title {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 15px; font-weight: 700; color: var(--vynk-dark);
+}
+.vynk-cart-card-title svg { color: var(--vynk-accent); }
+
+.vynk-cart-continue {
+    font-size: 13px; color: var(--vynk-accent);
+    text-decoration: none; font-weight: 500;
+    display: flex; align-items: center; gap: 4px;
+    transition: opacity var(--vynk-transition);
+}
+.vynk-cart-continue:hover { opacity: 0.75; }
+
+/* Cart items table */
+.vynk-cart-items-list { padding: 6px 0; }
+
+.vynk-cart-row {
+    display: grid;
+    grid-template-columns: 64px 1fr auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--vynk-border);
+    transition: background var(--vynk-transition);
+}
+.vynk-cart-row:last-child { border-bottom: none; }
+.vynk-cart-row:hover { background: var(--vynk-bg-input); }
+
+.vynk-cart-row-img img {
+    width: 64px; height: 64px; object-fit: cover;
+    border-radius: 12px; border: 1.5px solid var(--vynk-border); display: block;
+}
+
+.vynk-cart-row-info {}
+.vynk-cart-row-name {
+    font-size: 14px; font-weight: 600; color: var(--vynk-dark);
+    display: block; margin-bottom: 3px;
+    text-decoration: none;
+}
+.vynk-cart-row-name:hover { color: var(--vynk-accent); }
+.vynk-cart-row-meta { font-size: 12px; color: var(--vynk-secondary); }
+.vynk-cart-row-remove {
+    font-size: 11px; color: var(--vynk-secondary) !important;
+    cursor: pointer; background: none; border: none;
+    padding: 0; display: flex; align-items: center; gap: 3px;
+    transition: color var(--vynk-transition); font-family: var(--vynk-font);
+    text-decoration: none !important; margin-top: 5px;
+}
+.vynk-cart-row-remove:hover { color: var(--vynk-accent) !important; text-decoration: none !important; }
+
+/* Qty stepper */
+.vynk-qty-wrap {
+    display: flex; align-items: center;
+    border: 1.5px solid var(--vynk-border);
+    border-radius: 50px;
+    overflow: hidden; background: var(--vynk-bg-input);
+}
+.vynk-qty-btn {
+    background: none; border: none; cursor: pointer;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: var(--vynk-dark); font-weight: 600;
+    transition: background var(--vynk-transition);
+    flex-shrink: 0;
+}
+.vynk-qty-btn:hover { background: var(--vynk-border); }
+.vynk-qty-wrap input[type="number"] {
+    width: 40px; text-align: center;
+    border: none; background: none;
+    font-family: var(--vynk-font); font-size: 15px; font-weight: 600;
+    color: var(--vynk-dark); padding: 0;
+    -moz-appearance: textfield;
+}
+.vynk-qty-wrap input[type="number"]::-webkit-inner-spin-button { display: none; }
+
+.vynk-cart-row-price {
+    font-size: 15px; font-weight: 700; color: var(--vynk-dark);
+    white-space: nowrap; text-align: right; min-width: 72px;
+}
+
+/* ── Cart Summary Card ── */
+.vynk-cart-summary-card {
+    background: var(--vynk-bg);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: var(--vynk-r-card);
+    box-shadow: var(--vynk-shadow-sm);
+    overflow: hidden;
+}
+.vynk-cart-summary-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px 14px;
+    background: linear-gradient(135deg, #fafafa 0%, #fff 100%);
+    border-bottom: 2px solid var(--vynk-border);
+}
+
+/* Totals body */
+.vynk-cart-totals-body {
+    padding: 16px 20px 0;
+    display: flex; flex-direction: column; gap: 9px;
+}
+
+/* Grand total row */
+.vynk-cart-grand-total {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    margin-top: 8px;
+    background: var(--vynk-bg-input);
+    border-top: 2px solid var(--vynk-border);
+    border-bottom: 1px solid var(--vynk-border);
+}
+.vynk-cart-grand-total > span:first-child {
+    font-size: 16px; font-weight: 700; color: var(--vynk-dark);
+}
+.vynk-cart-grand-amount {
+    font-size: 20px; font-weight: 800; color: var(--vynk-accent);
+}
+.vynk-cart-grand-amount bdi { font-size: inherit; }
+
+/* Cart coupon inline */
+.vynk-cart-coupon {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--vynk-border);
+}
+.vynk-cart-coupon-input-group {
+    display: flex;
+    align-items: center;
+    background: var(--vynk-bg-input);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color var(--vynk-transition);
+    gap: 0;
+}
+.vynk-cart-coupon-input-group:focus-within {
+    border-color: var(--vynk-accent);
+}
+.vynk-cart-coupon-input-group > svg {
+    margin-left: 12px; flex-shrink: 0;
+    color: var(--vynk-secondary);
+}
+.vynk-cart-coupon-input-group input[type="text"] {
+    flex: 1;
+    background: transparent;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 11px 10px;
+    font-family: var(--vynk-font); font-size: 13px;
+    color: var(--vynk-dark);
+    outline: none !important;
+    box-shadow: none !important;
+}
+.vynk-cart-coupon-input-group input[type="text"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+.vynk-cart-coupon-input-group input::placeholder { color: #aaa; }
+.vynk-cart-coupon-btn {
+    background: var(--vynk-accent); color: #fff;
+    border: none; border-radius: 0 10px 10px 0;
+    padding: 0 16px; height: 100%; min-height: 42px;
+    font-family: var(--vynk-font); font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    transition: background var(--vynk-transition);
+}
+.vynk-cart-coupon-btn:hover { background: var(--vynk-accent-dark); }
+
+/* Cart checkout button wrap */
+.vynk-cart-checkout-wrap {
+    padding: 16px 20px 20px;
+}
+.vynk-cart-checkout-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%;
+    background: linear-gradient(135deg, var(--vynk-accent) 0%, #a01515 100%);
+    color: #fff;
+    border: none; border-radius: 14px;
+    padding: 16px 24px;
+    font-family: var(--vynk-font); font-size: 15px;
+    font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.7px; text-align: center;
+    cursor: pointer; text-decoration: none;
+    box-shadow: 0 4px 16px rgba(191,31,31,0.22);
+    transition: transform var(--vynk-transition), box-shadow var(--vynk-transition), filter var(--vynk-transition);
+}
+.vynk-cart-checkout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(191,31,31,0.32);
+    filter: brightness(1.06);
+    color: #fff;
+}
+.vynk-cart-secure-note {
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+    font-size: 11px; color: var(--vynk-secondary);
+    margin: 8px 0 0; padding: 0; text-align: center;
+}
+.vynk-cart-secure-note svg { color: #10B981; flex-shrink: 0; }
+
+/* Cart AJAX loading state */
+.vynk-cart-updating #vynk-cart-totals-wrap,
+.vynk-cart-updating .vynk-cart-row-price {
+    opacity: 0.45;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+/* Empty cart state */
+.vynk-cart-empty {
+    text-align: center; padding: 60px 20px;
+    color: var(--vynk-secondary);
+}
+.vynk-cart-empty svg { margin-bottom: 14px; opacity: 0.35; }
+.vynk-cart-empty h3 { font-size: 18px; margin: 0 0 8px; color: var(--vynk-dark); }
+.vynk-cart-empty p  { font-size: 14px; margin: 0 0 20px; }
+.vynk-cart-empty a {
+    display: inline-block; background: var(--vynk-dark); color: #fff;
+    border-radius: var(--vynk-r-btn); padding: 12px 26px;
+    font-weight: 700; text-decoration: none; font-size: 14px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    transition: background var(--vynk-transition);
+}
+.vynk-cart-empty a:hover { background: var(--vynk-accent); }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤ 860px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 860px) {
+
+    /* Layout: single column, sidebar above form */
+    .vynk-checkout-wrapper,
+    .vynk-cart-wrapper {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+        padding: 0 14px 40px;
+        max-width: 100%;
+    }
+    .vynk-checkout-sidebar,
+    .vynk-cart-sidebar {
+        position: static !important;
+        order: -1;
+    }
+
+    /* Summary sidebar: collapsed image size */
+    .vynk-summary-item-img img { width: 46px; height: 46px; }
+    .vynk-summary-header { padding: 14px 16px 12px; }
+    .vynk-summary-items  { padding: 12px 16px; gap: 10px; }
+
+    /* WC billing/shipping fields: stack 2-col rows */
+    .woocommerce-billing-fields .form-row,
+    .woocommerce-shipping-fields .form-row,
+    .vynk-checkout-wrapper .form-row,
+    .vynk-checkout-wrapper .form-row-first,
+    .vynk-checkout-wrapper .form-row-last {
+        width: 100% !important;
+        float: none !important;
+        clear: both !important;
+        margin-right: 0 !important;
+        display: block !important;
+    }
+
+    /* WC col2-set */
+    .col2-set, .col2-set .col-1, .col2-set .col-2 {
+        float: none !important;
+        width: 100% !important;
+    }
+
+    /* Vynk 2-col form rows */
+    .vynk-cf-row-2col { grid-template-columns: 1fr; }
+
+    /* Cart row: image | info + price / qty */
+    .vynk-cart-row {
+        grid-template-columns: 60px 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 8px 12px;
+    }
+    .vynk-cart-row-img  { grid-row: 1 / 3; }
+    .vynk-cart-row-info { grid-column: 2; grid-row: 1; }
+    .vynk-qty-wrap      { grid-column: 2; grid-row: 2; justify-self: start; }
+    .vynk-cart-row-price { grid-column: 3; grid-row: 1; align-self: start; text-align: right; }
+
+    /* Checkout wrapper dynamic column override already handled by PHP media query */
+
+    /* Thank you — tablet
+     * !important is REQUIRED: the base .vynk-thankyou-grid rule appears later in
+     * this file (CSS cascade), so without it the 1fr 300px desktop columns win and
+     * crush the main column to ~27px on mobile, making it invisible. */
+    .vynk-thankyou-wrapper    { padding: 0 14px 48px; }
+    .vynk-thankyou-grid       { grid-template-columns: 1fr !important; gap: 14px; }
+    .vynk-thankyou-sidebar    { position: static !important; max-width: 100% !important; width: 100%; }
+    .vynk-thankyou-infobar    { gap: 10px; margin-bottom: 18px; }
+    .vynk-thankyou-hero       { padding: 32px 16px 24px; }
+    .vynk-thankyou-title      { font-size: 22px; }
+    .vynk-thankyou-actions    { flex-wrap: wrap; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤ 540px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 540px) {
+
+    .vynk-checkout-wrapper,
+    .vynk-cart-wrapper { padding: 0 10px 32px; gap: 12px; }
+
+    /* Accordion */
+    .vynk-accordion-header { padding: 13px 14px; gap: 8px; }
+    .vynk-accordion-body   { padding: 0 12px 14px; }
+    .vynk-step-num         { width: 22px; height: 22px; font-size: 11px; }
+    .vynk-accordion-title  { font-size: 13px; }
+    .vynk-accordion-title svg { display: none; }
+
+    /* Payment secure badge — hide on small screens */
+    .vynk-payment-secure-badge { display: none; }
+
+    /* Summary card */
+    .vynk-summary-header   { padding: 12px 14px; }
+    .vynk-summary-title    { font-size: 13px; }
+    .vynk-summary-items    { padding: 10px 14px; gap: 10px; }
+    .vynk-summary-item-img img { width: 42px; height: 42px; }
+    .vynk-summary-item-name  { font-size: 12px; }
+    .vynk-summary-item-price { font-size: 12px; }
+
+    /* Sidebar shipping */
+    .vynk-sidebar-shipping       { padding: 10px 14px; }
+    .vynk-sidebar-shipping-header { font-size: 11px; margin-bottom: 8px; }
+    .vynk-sidebar-shipping .woocommerce-shipping-methods li { padding: 8px 10px; font-size: 12px; }
+
+    /* Totals */
+    .vynk-summary-totals,
+    .vynk-cart-totals-body { padding: 10px 14px; gap: 7px; }
+    .vynk-totals-row        { font-size: 13px; }
+    .vynk-totals-grand,
+    .vynk-cart-grand-total  { padding: 12px 14px; }
+    .vynk-cart-grand-amount { font-size: 18px; }
+
+    /* Coupon */
+    .vynk-coupon-area         { padding: 4px 14px 12px; }
+    .vynk-coupon-toggle-btn   { font-size: 12px; padding: 9px 12px; }
+    .vynk-cart-coupon         { padding: 10px 14px; }
+
+    /* Checkout button in cart */
+    .vynk-cart-checkout-wrap  { padding: 12px 14px 16px; }
+    .vynk-cart-checkout-btn   { font-size: 14px; padding: 14px 20px; border-radius: 12px; }
+
+    /* Place order */
+    .vynk-place-order-wrap    { padding: 0 14px 14px; }
+    #payment #place_order     { font-size: 14px !important; padding: 14px 20px !important; }
+
+    /* WC payment gateways */
+    #payment ul.payment_methods li { padding: 12px 14px !important; }
+    #payment .payment_box          { padding: 12px 14px !important; }
+
+    /* Cart items */
+    .vynk-cart-card-header { padding: 14px 14px 12px; }
+    .vynk-cart-row         { padding: 12px 14px; gap: 8px 10px; }
+    .vynk-cart-row-img img { width: 52px; height: 52px; }
+    .vynk-cart-row-name    { font-size: 13px; }
+    .vynk-cart-row-meta    { font-size: 11px; }
+    .vynk-cart-row-price   { font-size: 13px; }
+    .vynk-qty-btn          { width: 28px; height: 28px; font-size: 14px; }
+    .vynk-qty-wrap input[type="number"] { width: 32px; font-size: 13px; }
+
+    /* Cart summary card headers */
+    .vynk-cart-summary-header { padding: 14px 14px 12px; }
+
+    /* Branding */
+    .vynk-checkout-branding { margin-bottom: 14px; }
+    .vynk-checkout-logo img { max-height: 36px !important; }
+    .vynk-checkout-page-title { font-size: 18px !important; }
+
+    /* Thank you — mobile */
+    .vynk-thankyou-wrapper    { padding: 0 10px 32px; }
+    .vynk-thankyou-hero       { padding: 24px 12px 18px; }
+    .vynk-thankyou-icon       { width: 56px; height: 56px; }
+    .vynk-thankyou-icon svg   { width: 28px; height: 28px; }
+    .vynk-thankyou-title      { font-size: 19px; }
+    .vynk-thankyou-subtitle   { font-size: 13px; }
+    .vynk-thankyou-infobar    { gap: 8px; margin-bottom: 14px; }
+    .vynk-thankyou-info-item  { padding: 10px 12px; border-radius: 11px; }
+    .vynk-thankyou-info-label { font-size: 10px; }
+    .vynk-thankyou-info-value { font-size: 12px; }
+    /* !important: same cascade reason as the 860px block above */
+    .vynk-thankyou-grid       { grid-template-columns: 1fr !important; gap: 10px; }
+    .vynk-thankyou-card-header { padding: 13px 14px; font-size: 13px; }
+    .vynk-thankyou-item       { padding: 11px 14px; gap: 10px; }
+    .vynk-thankyou-item-img img { width: 46px; height: 46px; }
+    .vynk-thankyou-item-name  { font-size: 13px; white-space: normal; }
+    .vynk-thankyou-item-meta  { font-size: 11px; }
+    .vynk-thankyou-item-price { font-size: 13px; }
+    .vynk-thankyou-address    { padding: 12px 14px; font-size: 13px; }
+    .vynk-thankyou-totals-body { padding: 12px 14px; gap: 8px; }
+    .vynk-thankyou-actions    { flex-direction: column; gap: 8px; width: 100%; }
+    .vynk-thankyou-shop-btn,
+    .vynk-thankyou-retry-btn  { width: 100%; justify-content: center; padding: 14px 20px; border-radius: 14px; }
+
+    /* Cart shipping on mobile */
+    .vynk-sidebar-shipping    { padding: 12px 14px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — VERY SMALL (≤ 380px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 380px) {
+    .vynk-thankyou-infobar    { grid-template-columns: 1fr; }
+    .vynk-thankyou-info-item  { flex-direction: row; align-items: center; gap: 10px; padding: 10px 12px; }
+    .vynk-thankyou-info-label { margin-bottom: 0; flex-shrink: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   THANK YOU PAGE
+   ═══════════════════════════════════════════════════════════ */
+.vynk-thankyou-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+    font-family: var(--vynk-font);
+}
+
+/* Hero */
+.vynk-thankyou-hero {
+    text-align: center;
+    padding: 40px 20px 28px;
+}
+.vynk-thankyou-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(16,185,129,0.1);
+    color: var(--vynk-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+}
+.vynk-thankyou-hero--failed .vynk-thankyou-icon {
+    background: rgba(191,31,31,0.1);
+    color: var(--vynk-accent);
+}
+.vynk-thankyou-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--vynk-dark);
+    margin: 0 0 10px;
+    line-height: 1.2;
+}
+.vynk-thankyou-subtitle {
+    font-size: 14.5px;
+    color: var(--vynk-secondary);
+    margin: 0;
+    line-height: 1.6;
+    max-width: 480px;
+    margin-inline: auto;
+}
+
+/* Info bar */
+.vynk-thankyou-infobar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.vynk-thankyou-info-item {
+    background: var(--vynk-bg);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.vynk-thankyou-info-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--vynk-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.vynk-thankyou-info-label svg { color: var(--vynk-accent); flex-shrink: 0; }
+.vynk-thankyou-info-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+}
+
+/* Order status badge */
+.vynk-order-status {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.vynk-order-status--processing,
+.vynk-order-status--completed { background: rgba(16,185,129,0.12); color: #065f46; }
+.vynk-order-status--pending,
+.vynk-order-status--on-hold   { background: rgba(245,158,11,0.12); color: #92400e; }
+.vynk-order-status--failed,
+.vynk-order-status--cancelled { background: rgba(191,31,31,0.10); color: var(--vynk-accent); }
+
+/* Two-column grid */
+.vynk-thankyou-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    align-items: start;
+}
+/* Prevent grid-item blowout: without min-width:0 items default to min-width:auto
+   and wide content (long order numbers, prices) can push the column past its
+   declared size, making the sidebar "take too much space". */
+.vynk-thankyou-main,
+.vynk-thankyou-sidebar { min-width: 0; }
+
+.vynk-thankyou-main    { display: flex; flex-direction: column; gap: 16px; }
+/* max-width is capped by the grid column (300px on desktop).
+   On mobile the !important overrides in the media queries take over. */
+.vynk-thankyou-sidebar { position: sticky; top: 90px; }
+
+/* Shared card */
+.vynk-thankyou-card {
+    background: var(--vynk-bg);
+    border: 1.5px solid var(--vynk-border);
+    border-radius: var(--vynk-r-card);
+    box-shadow: var(--vynk-shadow-sm);
+    overflow: hidden;
+}
+.vynk-thankyou-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+    border-bottom: 1px solid var(--vynk-border);
+}
+.vynk-thankyou-card-header svg { color: var(--vynk-accent); flex-shrink: 0; }
+
+/* Products list */
+.vynk-thankyou-items {
+    display: flex;
+    flex-direction: column;
+}
+.vynk-thankyou-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--vynk-border);
+}
+.vynk-thankyou-item:last-child { border-bottom: none; }
+.vynk-thankyou-item-img {
+    position: relative;
+    flex-shrink: 0;
+}
+.vynk-thankyou-item-img img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--vynk-border);
+    display: block;
+}
+.vynk-thankyou-item-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.vynk-thankyou-item-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--vynk-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.vynk-thankyou-item-meta {
+    font-size: 12px;
+    color: var(--vynk-secondary);
+}
+.vynk-thankyou-item-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--vynk-dark);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Shipping address */
+.vynk-thankyou-address {
+    display: block;
+    padding: 16px 20px;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--vynk-secondary);
+}
+
+/* Totals card */
+.vynk-thankyou-totals-body {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 20px;
+    gap: 10px;
+}
+.vynk-thankyou-totals-card .vynk-totals-grand {
+    margin-top: 4px;
+    padding-top: 14px;
+    border-top: 2px solid var(--vynk-border);
+}
+
+/* CTA buttons */
+.vynk-thankyou-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.vynk-thankyou-shop-btn,
+.vynk-thankyou-retry-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 28px;
+    border-radius: var(--vynk-r-btn);
+    font-family: var(--vynk-font);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform var(--vynk-transition), background var(--vynk-transition);
+}
+.vynk-thankyou-shop-btn {
+    background: var(--vynk-accent);
+    color: #fff;
+}
+.vynk-thankyou-shop-btn:hover {
+    background: var(--vynk-accent-dark);
+    transform: translateY(-1px);
+    color: #fff;
+}
+.vynk-thankyou-retry-btn {
+    background: var(--vynk-bg);
+    color: var(--vynk-accent);
+    border: 2px solid var(--vynk-accent);
+}
+.vynk-thankyou-retry-btn:hover {
+    background: var(--vynk-accent-soft);
+    transform: translateY(-1px);
+    color: var(--vynk-accent);
+}

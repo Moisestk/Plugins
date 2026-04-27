@@ -1,0 +1,686 @@
+/* =============================================================================
+   Vynk Sidebar Cart — Estilos
+   Diseño basado en vynk.us: Barlow, rojo #bf1f1f, bordes redondeados, sombras suaves
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. Custom Properties (Design Tokens)
+   ----------------------------------------------------------------------------- */
+:root {
+	--vynk-accent:           #bf1f1f;
+	--vynk-accent-dark:      #a01818;
+	--vynk-accent-soft:      rgba(191, 31, 31, 0.08);
+	--vynk-dark:             #222222;
+	--vynk-secondary:        #575760;
+	--vynk-success:          #10B981;
+	--vynk-bg:               #ffffff;
+	--vynk-bg-page:          #f7f8f9;
+	--vynk-bg-input:         #f0f0f0;
+	--vynk-border:           #f0f0f0;
+	--vynk-border-mid:       #e4e4e8;
+
+	--vynk-font:             'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+	--vynk-r-card:           20px;
+	--vynk-r-input:          14px;
+	--vynk-r-btn:            50px;
+	--vynk-r-image:          12px;
+
+	--vynk-shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.07);
+	--vynk-shadow:           0 5px 10px rgba(0, 0, 0, 0.12);
+	--vynk-shadow-panel:     -4px 0 32px rgba(0, 0, 0, 0.14);
+
+	--vynk-transition:       0.22s ease;
+	--vynk-transition-panel: 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+
+	--vynk-panel-width:      420px;
+	--vynk-panel-z:          999999;
+	--vynk-overlay-z:        999998;
+	--vynk-trigger-z:        99999;
+}
+
+/* -----------------------------------------------------------------------------
+   2. Box-sizing scope (sin romper el tema)
+   ----------------------------------------------------------------------------- */
+.vynk-cart-overlay,
+.vynk-cart-panel,
+.vynk-cart-panel *,
+.vynk-cart-trigger,
+.vynk-cart-trigger * {
+	box-sizing: border-box;
+}
+
+/* -----------------------------------------------------------------------------
+   3. Overlay / Backdrop
+   ----------------------------------------------------------------------------- */
+.vynk-cart-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.45);
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
+	z-index: var(--vynk-overlay-z);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity var(--vynk-transition-panel);
+}
+
+.vynk-cart-overlay.is-visible {
+	opacity: 1;
+	pointer-events: all;
+}
+
+/* -----------------------------------------------------------------------------
+   4. Panel Shell — Off-canvas desde la derecha
+   ----------------------------------------------------------------------------- */
+.vynk-cart-panel {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 100%;
+	max-width: var(--vynk-panel-width);
+	height: 100vh;
+	height: 100dvh;
+	background: var(--vynk-bg);
+	box-shadow: var(--vynk-shadow-panel);
+	z-index: var(--vynk-panel-z);
+	display: flex;
+	flex-direction: column;
+	transform: translateX(100%);
+	transition: transform var(--vynk-transition-panel);
+	will-change: transform;
+	font-family: var(--vynk-font);
+	color: var(--vynk-dark);
+	overflow: hidden;
+}
+
+.vynk-cart-panel.is-open {
+	transform: translateX(0);
+}
+
+/* Bloquear scroll del body cuando el panel está abierto */
+body.vynk-cart-open {
+	overflow: hidden;
+}
+
+/* -----------------------------------------------------------------------------
+   5. Panel Header
+   ----------------------------------------------------------------------------- */
+.vynk-cart-panel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 24px;
+	border-bottom: 1.5px solid var(--vynk-border);
+	background: var(--vynk-bg);
+	flex-shrink: 0;
+}
+
+.vynk-cart-panel-title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0;
+	padding: 0;
+	font-size: 17px;
+	font-weight: 700;
+	color: var(--vynk-dark);
+	line-height: 1;
+	border: none;
+}
+
+.vynk-cart-panel-title svg {
+	color: var(--vynk-accent);
+	flex-shrink: 0;
+}
+
+.vynk-cart-close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border: 1.5px solid var(--vynk-border-mid);
+	border-radius: 50%;
+	background: none;
+	cursor: pointer;
+	color: var(--vynk-secondary);
+	transition: background var(--vynk-transition), color var(--vynk-transition), border-color var(--vynk-transition);
+	flex-shrink: 0;
+	padding: 0;
+}
+
+.vynk-cart-close:hover {
+	background: var(--vynk-bg-input);
+	color: var(--vynk-dark);
+	border-color: var(--vynk-dark);
+}
+
+/* -----------------------------------------------------------------------------
+   6. Panel Body — Lista de items (scrollable)
+   ----------------------------------------------------------------------------- */
+.vynk-cart-panel-body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 0 24px;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: thin;
+	scrollbar-color: var(--vynk-border-mid) transparent;
+}
+
+.vynk-cart-panel-body::-webkit-scrollbar {
+	width: 4px;
+}
+
+.vynk-cart-panel-body::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.vynk-cart-panel-body::-webkit-scrollbar-thumb {
+	background: var(--vynk-border-mid);
+	border-radius: 4px;
+}
+
+/* -----------------------------------------------------------------------------
+   7. Item Row
+   ----------------------------------------------------------------------------- */
+.vynk-cart-items {
+	padding: 8px 0;
+}
+
+.vynk-cart-item {
+	display: grid;
+	grid-template-columns: 80px 1fr;
+	gap: 0 14px;
+	padding: 18px 0;
+	border-bottom: 1.5px solid var(--vynk-border);
+	align-items: start;
+	position: relative;
+}
+
+.vynk-cart-item:last-child {
+	border-bottom: none;
+}
+
+/* Imagen del producto */
+.vynk-cart-item-image {
+	grid-row: 1 / 3;
+	width: 80px;
+	height: 80px;
+	border-radius: var(--vynk-r-image);
+	overflow: hidden;
+	background: var(--vynk-bg-page);
+	flex-shrink: 0;
+}
+
+.vynk-cart-item-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Info del producto */
+.vynk-cart-item-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+
+.vynk-cart-item-name {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--vynk-dark);
+	line-height: 1.3;
+	text-decoration: none;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.vynk-cart-item-name:hover {
+	color: var(--vynk-accent);
+}
+
+.vynk-cart-item-attributes {
+	font-size: 12px;
+	color: var(--vynk-secondary);
+	line-height: 1.4;
+}
+
+.vynk-cart-item-price {
+	font-size: 13px;
+	color: var(--vynk-secondary);
+	margin-top: 2px;
+}
+
+/* Controles: qty stepper + subtotal + remove */
+.vynk-cart-item-controls {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 10px;
+	gap: 8px;
+}
+
+.vynk-cart-item-subtotal {
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--vynk-dark);
+	white-space: nowrap;
+}
+
+/* -----------------------------------------------------------------------------
+   8. Quantity Stepper
+   ----------------------------------------------------------------------------- */
+.vynk-qty-wrap {
+	display: flex;
+	align-items: center;
+	border: 1.5px solid var(--vynk-border-mid);
+	border-radius: var(--vynk-r-btn);
+	overflow: hidden;
+	background: var(--vynk-bg);
+	flex-shrink: 0;
+}
+
+.vynk-qty-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+	font-weight: 400;
+	line-height: 1;
+	color: var(--vynk-dark);
+	transition: background var(--vynk-transition), color var(--vynk-transition);
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.vynk-qty-btn:hover {
+	background: var(--vynk-bg-input);
+	color: var(--vynk-accent);
+}
+
+.vynk-qty-btn:disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+
+.vynk-qty-display {
+	width: 30px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--vynk-dark);
+	font-family: var(--vynk-font);
+	user-select: none;
+}
+
+/* -----------------------------------------------------------------------------
+   9. Remove Button
+   ----------------------------------------------------------------------------- */
+.vynk-cart-item-remove {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	color: var(--vynk-secondary);
+	border-radius: 50%;
+	transition: background var(--vynk-transition), color var(--vynk-transition);
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.vynk-cart-item-remove:hover {
+	background: rgba(191, 31, 31, 0.1);
+	color: var(--vynk-accent);
+}
+
+/* -----------------------------------------------------------------------------
+   10. Panel Footer — Subtotal + CTA
+   ----------------------------------------------------------------------------- */
+.vynk-cart-panel-footer {
+	padding: 20px 24px 24px;
+	border-top: 1.5px solid var(--vynk-border);
+	background: var(--vynk-bg);
+	flex-shrink: 0;
+}
+
+.vynk-cart-subtotal-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 16px;
+}
+
+.vynk-cart-subtotal-label {
+	font-size: 14px;
+	color: var(--vynk-secondary);
+	font-weight: 500;
+}
+
+.vynk-cart-subtotal-amount {
+	font-size: 20px;
+	font-weight: 700;
+	color: var(--vynk-dark);
+}
+
+.vynk-cart-checkout-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	padding: 14px 24px;
+	background: var(--vynk-accent);
+	color: #ffffff;
+	border-radius: var(--vynk-r-btn);
+	font-family: var(--vynk-font);
+	font-size: 15px;
+	font-weight: 700;
+	text-decoration: none;
+	border: 2px solid var(--vynk-accent);
+	cursor: pointer;
+	transition: background var(--vynk-transition), transform 0.15s ease, box-shadow var(--vynk-transition);
+	box-shadow: 0 4px 14px rgba(191, 31, 31, 0.30);
+}
+
+.vynk-cart-checkout-btn:hover {
+	background: var(--vynk-accent-dark);
+	border-color: var(--vynk-accent-dark);
+	color: #ffffff;
+	transform: translateY(-1px);
+	box-shadow: 0 6px 18px rgba(191, 31, 31, 0.38);
+	text-decoration: none;
+}
+
+.vynk-cart-checkout-btn:active {
+	transform: translateY(0);
+}
+
+.vynk-cart-secure-note {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	margin: 12px 0 0;
+	font-size: 12px;
+	color: var(--vynk-secondary);
+	text-align: center;
+}
+
+.vynk-cart-view-cart-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	/* Mismo padding y font-size que .vynk-cart-checkout-btn */
+	padding: 14px 24px;
+	margin: 0 0 10px;
+	background: transparent;
+	color: var(--vynk-accent) !important;
+	border: 2px solid var(--vynk-accent);
+	border-radius: var(--vynk-r-btn);
+	font-family: var(--vynk-font);
+	font-size: 15px;
+	font-weight: 700;
+	text-decoration: none !important;
+	text-align: center;
+	letter-spacing: 0.01em;
+	cursor: pointer;
+	transition: background var(--vynk-transition), color var(--vynk-transition), transform 0.15s ease;
+	box-sizing: border-box;
+}
+
+.vynk-cart-view-cart-link:hover,
+.vynk-cart-view-cart-link:focus {
+	background: var(--vynk-accent);
+	color: #fff !important;
+	text-decoration: none !important;
+	transform: translateY(-1px);
+}
+
+.vynk-cart-view-cart-link svg {
+	flex-shrink: 0;
+	stroke: currentColor;
+}
+
+/* -----------------------------------------------------------------------------
+   11. Empty State
+   ----------------------------------------------------------------------------- */
+.vynk-cart-empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	padding: 60px 24px;
+	text-align: center;
+}
+
+.vynk-cart-empty-state[aria-hidden="true"] {
+	display: none;
+}
+
+.vynk-cart-empty-state svg {
+	color: var(--vynk-border-mid);
+	opacity: 0.7;
+}
+
+.vynk-cart-empty-state p {
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--vynk-secondary);
+	margin: 0;
+}
+
+.vynk-cart-continue-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--vynk-accent);
+	text-decoration: none;
+	transition: gap var(--vynk-transition), opacity var(--vynk-transition);
+}
+
+.vynk-cart-continue-link:hover {
+	gap: 10px;
+	opacity: 0.85;
+	color: var(--vynk-accent);
+	text-decoration: none;
+}
+
+/* -----------------------------------------------------------------------------
+   12. Floating Trigger Button
+   ----------------------------------------------------------------------------- */
+.vynk-cart-trigger {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--vynk-dark);
+	color: #ffffff;
+	border: none;
+	cursor: pointer;
+	font-family: var(--vynk-font);
+	transition: background var(--vynk-transition), transform 0.15s ease;
+	padding: 0;
+}
+
+.vynk-cart-trigger:hover {
+	background: #4f4f4f;
+}
+
+/* Botón flotante fijo */
+.vynk-cart-trigger--floating {
+	position: fixed;
+	bottom: 24px;
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	box-shadow: var(--vynk-shadow);
+	z-index: var(--vynk-trigger-z);
+}
+
+.vynk-cart-trigger--floating:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.vynk-cart-trigger--right {
+	right: 24px;
+}
+
+.vynk-cart-trigger--left {
+	left: 24px;
+}
+
+/* Botón inline (shortcode) */
+.vynk-cart-trigger:not(.vynk-cart-trigger--floating) {
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+}
+
+/* -----------------------------------------------------------------------------
+   13. Badge de conteo
+   ----------------------------------------------------------------------------- */
+.vynk-cart-count-badge {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 5px;
+	background: var(--vynk-accent);
+	color: #ffffff;
+	font-size: 11px;
+	font-weight: 700;
+	font-family: var(--vynk-font);
+	border-radius: 50px;
+	line-height: 1;
+}
+
+/* Badge sobre botón flotante o shortcode: posición absoluta */
+.vynk-cart-trigger .vynk-cart-count-badge {
+	position: absolute;
+	top: -4px;
+	right: -4px;
+	min-width: 18px;
+	height: 18px;
+	font-size: 10px;
+	border: 2px solid var(--vynk-bg);
+}
+
+/* Badge vacío: ocultar */
+.vynk-cart-count-badge[data-empty="true"] {
+	display: none;
+}
+
+/* Badge en el header del panel (inline) */
+.vynk-cart-panel-title .vynk-cart-count-badge {
+	position: static;
+	border: none;
+}
+
+/* -----------------------------------------------------------------------------
+   14. Loading State
+   ----------------------------------------------------------------------------- */
+.vynk-cart-panel.vynk-cart-loading .vynk-cart-panel-body {
+	opacity: 0.5;
+	pointer-events: none;
+	transition: opacity 0.15s ease;
+}
+
+.vynk-cart-panel.vynk-cart-loading .vynk-cart-panel-footer {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+/* -----------------------------------------------------------------------------
+   15. RTL Support
+   ----------------------------------------------------------------------------- */
+[dir="rtl"] .vynk-cart-panel {
+	right: auto;
+	left: 0;
+	transform: translateX(-100%);
+	box-shadow: 4px 0 32px rgba(0, 0, 0, 0.14);
+}
+
+[dir="rtl"] .vynk-cart-panel.is-open {
+	transform: translateX(0);
+}
+
+[dir="rtl"] .vynk-cart-trigger--floating.vynk-cart-trigger--right {
+	right: auto;
+	left: 24px;
+}
+
+[dir="rtl"] .vynk-cart-trigger--floating.vynk-cart-trigger--left {
+	left: auto;
+	right: 24px;
+}
+
+/* -----------------------------------------------------------------------------
+   16. Responsive — Móvil (≤ 480px)
+   ----------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+	.vynk-cart-panel {
+		max-width: 100%;
+		border-radius: 0;
+	}
+
+	.vynk-cart-panel-header {
+		padding: 16px 18px;
+	}
+
+	.vynk-cart-panel-body {
+		padding: 0 18px;
+	}
+
+	.vynk-cart-panel-footer {
+		padding: 16px 18px 20px;
+	}
+
+	.vynk-cart-checkout-btn,
+	.vynk-cart-view-cart-link {
+		padding: 13px 16px;
+		font-size: 14px;
+	}
+
+	.vynk-cart-item {
+		grid-template-columns: 70px 1fr;
+		gap: 0 12px;
+	}
+
+	.vynk-cart-item-image {
+		width: 70px;
+		height: 70px;
+	}
+
+	.vynk-cart-trigger--floating {
+		bottom: 16px;
+	}
+
+	.vynk-cart-trigger--right {
+		right: 16px;
+	}
+
+	.vynk-cart-trigger--left {
+		left: 16px;
+	}
+}

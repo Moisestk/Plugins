@@ -1,0 +1,333 @@
+/* =============================================================
+   Vynk Checkout — Admin Settings Panel Styles
+   ============================================================= */
+
+/* ── Header ── */
+.vynk-admin-wrap {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    max-width: 1100px;
+}
+
+.vynk-admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.vynk-admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.vynk-admin-brand h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 2px;
+    line-height: 1.2;
+}
+
+.vynk-admin-brand p {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.vynk-admin-logo-preview-header {
+    max-height: 48px;
+    border-radius: 6px;
+}
+
+.vynk-admin-preview-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    background: #111;
+    color: #fff !important;
+    border-radius: 22px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.vynk-admin-preview-btn:hover {
+    background: #bf1f1f;
+}
+
+/* ── Grid Layout ── */
+.vynk-admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.vynk-admin-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── Cards ── */
+.vynk-admin-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 22px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.vynk-admin-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f0f0f0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.vynk-admin-card-save {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ── Form Fields ── */
+.vynk-admin-field {
+    margin-bottom: 18px;
+}
+
+.vynk-admin-field:last-child {
+    margin-bottom: 0;
+}
+
+.vynk-admin-field > label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 7px;
+}
+
+.vynk-admin-field input[type="text"].regular-text {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1.5px solid #e5e7eb;
+    padding: 9px 13px;
+    font-size: 14px;
+    color: #111;
+    transition: border-color 0.2s;
+}
+
+.vynk-admin-field input[type="text"].regular-text:focus {
+    border-color: #bf1f1f;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(191,31,31,0.1);
+}
+
+.vynk-admin-field .description {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 5px 0 0;
+}
+
+/* ── Color Grid ── */
+.vynk-color-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+/* WP Color Picker alignment */
+.vynk-admin-card .wp-picker-container {
+    display: block;
+}
+
+.vynk-admin-card .wp-color-result.button {
+    border-radius: 8px;
+}
+
+/* ── Logo Uploader ── */
+.vynk-logo-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* ── Radio Cards (Layout Picker) ── */
+.vynk-radio-group {
+    display: flex;
+    gap: 12px;
+}
+
+.vynk-radio-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafafa;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.vynk-radio-card input[type="radio"] {
+    display: none;
+}
+
+.vynk-radio-card:hover {
+    border-color: #bf1f1f;
+}
+
+.vynk-radio-card.is-selected {
+    border-color: #bf1f1f;
+    background: rgba(191,31,31,0.04);
+    box-shadow: 0 0 0 3px rgba(191,31,31,0.1);
+    color: #bf1f1f;
+}
+
+/* ── Toggle List ── */
+.vynk-toggle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.vynk-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+}
+
+.vynk-toggle-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.vynk-toggle-row:first-child {
+    padding-top: 0;
+}
+
+.vynk-toggle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.vynk-toggle-info strong {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+}
+
+.vynk-toggle-info span {
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.4;
+}
+
+/* Toggle Switch */
+.vynk-toggle-switch {
+    position: relative;
+    flex-shrink: 0;
+    width: 44px;
+    height: 24px;
+}
+
+.vynk-toggle-switch input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.vynk-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #d1d5db;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.vynk-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.vynk-toggle-switch input:checked ~ .vynk-toggle-slider {
+    background: #bf1f1f;
+}
+
+.vynk-toggle-switch input:checked ~ .vynk-toggle-slider::before {
+    transform: translateX(20px);
+}
+
+/* ── Save Button ── */
+.vynk-save-btn.button-primary {
+    background: #bf1f1f !important;
+    border-color: #bf1f1f !important;
+    border-radius: 22px !important;
+    padding: 8px 28px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: none !important;
+    height: auto !important;
+    line-height: 1.5 !important;
+    transition: background 0.2s ease !important;
+}
+
+.vynk-save-btn.button-primary:hover {
+    background: #a01818 !important;
+    border-color: #a01818 !important;
+}
+
+.vynk-admin-version {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .vynk-admin-grid {
+        grid-template-columns: 1fr;
+    }
+    .vynk-color-grid {
+        grid-template-columns: 1fr;
+    }
+}

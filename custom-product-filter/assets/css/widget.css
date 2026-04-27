@@ -1,0 +1,1438 @@
+/* =============================================================================
+   Custom Product Filter — Estilos modernos
+   Hereda colores/fuentes del tema via CSS variables de Elementor
+   ============================================================================= */
+
+/* Variables base (fallbacks cuando el tema no las define) */
+.cpf-wrapper {
+    --cpf-font:        var(--e-global-typography-text-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+    --cpf-color-text:  var(--e-global-color-text, #1a1a2e);
+    --cpf-color-muted: var(--e-global-color-secondary, #6b7280);
+    --cpf-color-bg:    #ffffff;
+    --cpf-color-border:#e5e7eb;
+    --cpf-accent:      var(--e-global-color-accent, #6C63FF);
+    --cpf-radius:      14px;
+    --cpf-shadow:      0 4px 20px rgba(0,0,0,0.07);
+    --cpf-transition:  0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    --cpf-cols:        3;
+    --cpf-cols-tablet: 2;
+    --cpf-cols-mobile: 1;
+
+    font-family: var(--cpf-font);
+    color: var(--cpf-color-text);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* =============================================================================
+   Layout principal
+   ============================================================================= */
+.cpf-wrapper {
+    display: block;
+}
+
+.cpf-wrapper--has-sidebar {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .cpf-wrapper--has-sidebar {
+        grid-template-columns: 240px 1fr;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cpf-wrapper--has-sidebar {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =============================================================================
+   Sidebar
+   ============================================================================= */
+.cpf-sidebar {
+    background-color: #f8f9fa;
+    border-radius: var(--cpf-radius);
+    padding: 24px;
+    position: sticky;
+    top: 24px;
+    overflow: hidden;
+}
+
+.cpf-sidebar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--cpf-color-border);
+}
+
+.cpf-sidebar__title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--cpf-color-text);
+}
+
+/* Reset button */
+.cpf-reset-btn {
+    background: none;
+    border: none;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cpf-accent);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background var(--cpf-transition);
+    font-family: var(--cpf-font);
+}
+
+.cpf-reset-btn:hover {
+    background: color-mix(in srgb, var(--cpf-accent) 8%, transparent);
+}
+
+/* =============================================================================
+   Grupos de filtros
+   ============================================================================= */
+.cpf-filter-group {
+    border-bottom: 1px solid var(--cpf-color-border);
+}
+
+.cpf-filter-group:last-child {
+    border-bottom: none;
+}
+
+.cpf-filter-group__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    padding: 13px 0;
+    cursor: pointer;
+    font-family: var(--cpf-font);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cpf-color-text);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color var(--cpf-transition);
+    box-shadow: none !important;
+    outline: none;
+    border-radius: 0 !important;
+}
+
+.cpf-wrapper .cpf-filter-group__toggle,
+.cpf-wrapper .cpf-filter-group__toggle:hover,
+.cpf-wrapper .cpf-filter-group__toggle:focus,
+.cpf-wrapper .cpf-filter-group__toggle:active {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    text-decoration: none !important;
+}
+
+.cpf-wrapper .cpf-filter-group__toggle:hover,
+.cpf-wrapper .cpf-filter-group__toggle:focus {
+    color: var(--cpf-accent) !important;
+}
+
+.cpf-filter-group__arrow {
+    width: 14px;
+    height: 14px;
+    color: var(--cpf-color-muted);
+    transition: transform var(--cpf-transition);
+    flex-shrink: 0;
+}
+
+.cpf-filter-group.is-open .cpf-filter-group__arrow {
+    transform: rotate(180deg);
+}
+
+.cpf-filter-group__body {
+    display: none;
+    padding-bottom: 12px;
+}
+
+.cpf-filter-group.is-open .cpf-filter-group__body {
+    display: block;
+}
+
+/* =============================================================================
+   Checkboxes personalizados
+   ============================================================================= */
+.cpf-checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--cpf-color-border) transparent;
+    margin: 0 -4px;
+    padding: 0 4px;
+}
+
+.cpf-checkbox-list::-webkit-scrollbar { width: 3px; }
+.cpf-checkbox-list::-webkit-scrollbar-track { background: transparent; }
+.cpf-checkbox-list::-webkit-scrollbar-thumb {
+    background: var(--cpf-color-border);
+    border-radius: 4px;
+}
+
+.cpf-checkbox-item {
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background var(--cpf-transition);
+    user-select: none;
+    min-height: 36px;
+}
+
+.cpf-checkbox-item:hover {
+    background: rgba(0,0,0,0.04);
+}
+
+.cpf-checkbox-item input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+/* Checkbox box */
+.cpf-checkbox__box {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 5px;
+    background: #fff;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--cpf-transition), border-color var(--cpf-transition), box-shadow var(--cpf-transition);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.cpf-checkbox-item:hover .cpf-checkbox__box {
+    border-color: var(--cpf-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cpf-accent) 12%, transparent);
+}
+
+.cpf-checkbox-item input[type="checkbox"]:checked + .cpf-checkbox__box {
+    background: var(--cpf-accent);
+    border-color: var(--cpf-accent);
+    box-shadow: none;
+}
+
+.cpf-checkbox__box::after {
+    content: '';
+    display: none;
+    width: 4px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.cpf-checkbox-item input[type="checkbox"]:checked + .cpf-checkbox__box::after {
+    display: block;
+}
+
+/* Label — una línea, trunca si es muy largo */
+.cpf-checkbox__label {
+    font-size: 13px;
+    color: var(--cpf-color-text);
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--cpf-transition);
+}
+
+.cpf-checkbox-item:hover .cpf-checkbox__label,
+.cpf-checkbox-item input[type="checkbox"]:checked ~ .cpf-checkbox__label {
+    color: var(--cpf-color-text);
+    font-weight: 500;
+}
+
+/* Badge de cantidad */
+.cpf-checkbox__count {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cpf-color-muted);
+    background: rgba(0,0,0,0.06);
+    padding: 2px 7px;
+    border-radius: 20px;
+    min-width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+    line-height: 1.5;
+}
+
+.cpf-checkbox-item input[type="checkbox"]:checked ~ .cpf-checkbox__count {
+    background: color-mix(in srgb, var(--cpf-accent) 12%, transparent);
+    color: var(--cpf-accent);
+}
+
+/* =============================================================================
+   Price Range Slider
+   ============================================================================= */
+.cpf-price-range {
+    padding: 4px 0 8px;
+}
+
+.cpf-price-range__values {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cpf-color-text);
+}
+
+.cpf-price-range__separator {
+    color: var(--cpf-color-muted);
+    font-weight: 400;
+}
+
+.cpf-price-range__track-wrap {
+    position: relative;
+    height: 4px;
+    background: var(--cpf-color-border);
+    border-radius: 4px;
+    margin: 8px 0 20px;
+}
+
+.cpf-price-range__track-fill {
+    position: absolute;
+    height: 100%;
+    background: var(--cpf-accent);
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+.cpf-price-range input[type="range"] {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+}
+
+.cpf-price-range input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--cpf-accent);
+    border: 2px solid #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    pointer-events: all;
+    cursor: pointer;
+    transition: transform var(--cpf-transition);
+}
+
+.cpf-price-range input[type="range"]::-webkit-slider-thumb:hover,
+.cpf-price-range input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+}
+
+.cpf-price-range input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--cpf-accent);
+    border: 2px solid #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    pointer-events: all;
+    cursor: pointer;
+}
+
+/* =============================================================================
+   Toolbar
+   ============================================================================= */
+.cpf-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.cpf-toolbar__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    flex-wrap: wrap;
+}
+
+/* Buscador */
+.cpf-search {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 360px;
+}
+
+.cpf-search__icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--cpf-color-muted);
+    pointer-events: none;
+    z-index: 2;
+    display: block;
+    flex-shrink: 0;
+}
+
+.cpf-wrapper .cpf-search {
+    position: relative !important;
+    display: block !important;
+}
+
+.cpf-wrapper .cpf-search .cpf-search__icon,
+.cpf-wrapper .cpf-search svg.cpf-search__icon {
+    position: absolute !important;
+    left: 14px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 16px !important;
+    height: 16px !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+    display: block !important;
+}
+
+.cpf-search__input {
+    width: 100%;
+    height: 42px;
+    padding: 0 16px 0 44px !important;
+    border: 1.5px solid var(--cpf-color-border) !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    font-family: var(--cpf-font);
+    font-size: 14px !important;
+    color: var(--cpf-color-text);
+    outline: none;
+    transition: border-color var(--cpf-transition), box-shadow var(--cpf-transition);
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    line-height: normal !important;
+    margin: 0 !important;
+}
+
+.cpf-wrapper .cpf-search .cpf-search__input,
+.cpf-wrapper .cpf-search input[type="text"],
+.cpf-wrapper .cpf-search input[type="search"] {
+    padding-left: 44px !important;
+    padding-right: 16px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    box-sizing: border-box !important;
+    text-indent: 0 !important;
+}
+
+.cpf-search__input:focus {
+    border-color: var(--cpf-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cpf-accent) 12%, transparent);
+}
+
+.cpf-search__input::placeholder {
+    color: var(--cpf-color-muted);
+}
+
+/* Contador */
+.cpf-results-count {
+    font-size: 13px;
+    color: var(--cpf-color-muted);
+    white-space: nowrap;
+}
+
+.cpf-results-count strong {
+    color: var(--cpf-color-text);
+    font-weight: 600;
+}
+
+/* Ordenamiento */
+.cpf-sort {
+    position: relative;
+}
+
+.cpf-sort__select {
+    height: 42px;
+    padding: 0 36px 0 14px;
+    border: 1.5px solid var(--cpf-color-border);
+    border-radius: 10px;
+    background: #fff;
+    font-family: var(--cpf-font);
+    font-size: 13.5px;
+    color: var(--cpf-color-text);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color var(--cpf-transition);
+}
+
+.cpf-sort__select:focus,
+.cpf-sort__select:hover {
+    border-color: var(--cpf-accent);
+}
+
+.cpf-sort__arrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--cpf-color-muted);
+    pointer-events: none;
+}
+
+/* =============================================================================
+   Tags de filtros activos
+   ============================================================================= */
+.cpf-active-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    min-height: 0;
+}
+
+.cpf-active-tags:empty {
+    display: none;
+}
+
+.cpf-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px 5px 12px;
+    background: color-mix(in srgb, var(--cpf-accent) 10%, transparent);
+    color: var(--cpf-accent);
+    border: 1.5px solid color-mix(in srgb, var(--cpf-accent) 20%, transparent);
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--cpf-transition), transform var(--cpf-transition);
+    animation: cpf-tag-in 0.18s ease;
+}
+
+.cpf-tag:hover {
+    background: color-mix(in srgb, var(--cpf-accent) 18%, transparent);
+    transform: translateY(-1px);
+}
+
+.cpf-tag__remove {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--cpf-accent) 15%, transparent);
+    font-size: 10px;
+    font-style: normal;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+@keyframes cpf-tag-in {
+    from { opacity: 0; transform: scale(0.85) translateY(4px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* =============================================================================
+   Grid de productos
+   ============================================================================= */
+.cpf-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cpf-cols, 3), 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .cpf-grid {
+        grid-template-columns: repeat(var(--cpf-cols-tablet, 2), 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .cpf-grid {
+        grid-template-columns: repeat(var(--cpf-cols-mobile, 1), 1fr);
+        gap: 14px;
+    }
+}
+
+/* =============================================================================
+   Card de producto
+   ============================================================================= */
+.cpf-card {
+    background: var(--cpf-color-bg);
+    border-radius: var(--cpf-radius);
+    box-shadow: var(--cpf-shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--cpf-transition), box-shadow var(--cpf-transition);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    animation: cpf-card-in 0.25s ease both;
+}
+
+.cpf-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+}
+
+@keyframes cpf-card-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Imagen */
+.cpf-card__image-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* cuadrada por defecto */
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.cpf-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cpf-card:hover .cpf-card__image {
+    transform: scale(1.06);
+}
+
+/* Badges */
+.cpf-card__badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cpf-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+}
+
+.cpf-badge--sale {
+    background: var(--cpf-accent);
+    color: #fff;
+}
+
+.cpf-badge--new {
+    background: #10b981;
+    color: #fff;
+}
+
+.cpf-badge--out {
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+}
+
+/* Cuerpo de la card */
+.cpf-card__body {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 6px;
+}
+
+.cpf-card__cats {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cpf-color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cpf-card__name {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--cpf-color-text);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+    flex: 1;
+}
+
+/* Rating */
+.cpf-card__rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cpf-stars {
+    display: flex;
+    gap: 1px;
+}
+
+.cpf-star {
+    width: 12px;
+    height: 12px;
+    fill: #d1d5db;
+    color: #d1d5db;
+}
+
+.cpf-star.is-filled {
+    fill: #f59e0b;
+    color: #f59e0b;
+}
+
+.cpf-card__review-count {
+    font-size: 11.5px;
+    color: var(--cpf-color-muted);
+}
+
+/* Precio */
+.cpf-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--cpf-color-border);
+}
+
+.cpf-card__price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.cpf-card__price-current {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cpf-color-text);
+    line-height: 1;
+}
+
+.cpf-card__price-regular {
+    font-size: 13px;
+    color: var(--cpf-color-muted);
+    text-decoration: line-through;
+}
+
+.cpf-card__price-current.is-sale {
+    color: var(--cpf-accent);
+}
+
+/* Botón de card */
+.cpf-card__btn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cpf-accent);
+    color: #fff;
+    border-radius: 10px;
+    transition: transform var(--cpf-transition), background var(--cpf-transition), opacity var(--cpf-transition);
+    flex-shrink: 0;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.cpf-card__btn svg {
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+}
+
+.cpf-card:hover .cpf-card__btn {
+    transform: scale(1.1);
+}
+
+.cpf-card__btn.is-loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.cpf-card__btn.is-loading svg {
+    animation: cpf-spin 0.7s linear infinite;
+}
+
+/* =============================================================================
+   Toast de carrito — estilo VYNK
+   ============================================================================= */
+#cpf-toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.cpf-toast {
+    pointer-events: all;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 340px;
+    background: #1a0a0a;
+    border-radius: 14px;
+    padding: 16px 16px 0;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06);
+    overflow: hidden;
+    position: relative;
+    animation: cpf-toast-in 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    border-left: 3px solid #cc1111;
+}
+
+.cpf-toast.is-hiding {
+    animation: cpf-toast-out 0.24s ease forwards;
+}
+
+@keyframes cpf-toast-in {
+    from { opacity: 0; transform: translateX(110%) scale(0.92); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes cpf-toast-out {
+    from { opacity: 1; transform: translateX(0) scale(1); max-height: 120px; }
+    to   { opacity: 0; transform: translateX(110%) scale(0.92); max-height: 0; padding: 0; }
+}
+
+.cpf-toast__icon {
+    width: 34px;
+    height: 34px;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1.5px solid rgba(34, 197, 94, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.cpf-toast__icon svg {
+    width: 15px;
+    height: 15px;
+    stroke: #22c55e;
+    stroke-width: 2.5;
+    fill: none;
+}
+
+.cpf-toast__img {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #2a1010;
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-top: 2px;
+}
+
+.cpf-toast__body {
+    flex: 1;
+    min-width: 0;
+    padding-bottom: 14px;
+}
+
+.cpf-toast__label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #22c55e;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.cpf-toast__name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f0f0f0;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+    display: block;
+    max-width: 190px;
+}
+
+.cpf-toast__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.cpf-toast__cart-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: #cc1111;
+    color: #fff !important;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: background 0.18s ease, transform 0.18s ease;
+    line-height: 1;
+    font-family: inherit;
+}
+
+.cpf-toast__cart-btn:hover {
+    background: #e01515;
+    transform: translateY(-1px);
+}
+
+.cpf-toast__cart-btn svg {
+    width: 12px;
+    height: 12px;
+    stroke: #fff;
+    fill: none;
+    flex-shrink: 0;
+}
+
+.cpf-toast__close {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.3);
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: color 0.15s, background 0.15s;
+    padding: 0;
+    line-height: 1;
+}
+
+.cpf-toast__close:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+.cpf-toast__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: #cc1111;
+    border-radius: 0 3px 0 14px;
+    width: 100%;
+    transform-origin: left;
+    animation: cpf-toast-progress var(--cpf-toast-duration, 4000ms) linear forwards;
+}
+
+@keyframes cpf-toast-progress {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+}
+
+@media (max-width: 480px) {
+    #cpf-toast-container {
+        /* Bajar para evitar quedar detrás del header sticky */
+        top: auto;
+        bottom: 20px;
+        right: 12px;
+        left: 12px;
+    }
+    .cpf-toast {
+        width: 100%;
+    }
+    @keyframes cpf-toast-in {
+        from { opacity: 0; transform: translateY(30px) scale(0.95); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes cpf-toast-out {
+        from { opacity: 1; transform: translateY(0); }
+        to   { opacity: 0; transform: translateY(20px); }
+    }
+}
+
+/* =============================================================================
+   Skeleton Loading
+   ============================================================================= */
+@keyframes cpf-shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position: 600px 0; }
+}
+
+.cpf-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 600px 100%;
+    animation: cpf-shimmer 1.4s infinite linear;
+    border-radius: 6px;
+}
+
+/* Skeletons del sidebar */
+.cpf-filter-skeleton {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--cpf-color-border);
+}
+
+.cpf-skeleton--heading {
+    height: 14px;
+    width: 60%;
+    margin-bottom: 12px;
+    border-radius: 4px;
+}
+
+.cpf-skeleton--line {
+    height: 12px;
+    width: 85%;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+.cpf-skeleton--short {
+    width: 50%;
+}
+
+/* Skeletons del grid */
+.cpf-skeleton-card {
+    background: #fff;
+    border-radius: var(--cpf-radius);
+    box-shadow: var(--cpf-shadow);
+    overflow: hidden;
+}
+
+.cpf-skeleton--image {
+    width: 100%;
+    padding-bottom: 100%;
+    border-radius: 0;
+}
+
+.cpf-skeleton--title {
+    height: 14px;
+    width: 80%;
+    margin: 14px 16px 8px;
+}
+
+.cpf-skeleton--price {
+    height: 18px;
+    width: 40%;
+    margin: 0 16px 16px;
+}
+
+/* =============================================================================
+   Estado vacío
+   ============================================================================= */
+.cpf-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--cpf-color-muted);
+}
+
+.cpf-empty svg {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+    opacity: 0.4;
+}
+
+.cpf-empty p {
+    font-size: 15px;
+    margin: 0 0 16px;
+}
+
+.cpf-empty__reset {
+    padding: 10px 20px;
+    background: var(--cpf-accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--cpf-font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity var(--cpf-transition), transform var(--cpf-transition);
+}
+
+.cpf-empty__reset:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+/* =============================================================================
+   Paginación
+   ============================================================================= */
+.cpf-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+}
+
+.cpf-pagination__btn {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--cpf-color-border);
+    border-radius: 10px;
+    background: #fff;
+    font-family: var(--cpf-font);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--cpf-color-text);
+    cursor: pointer;
+    transition: border-color var(--cpf-transition), background var(--cpf-transition), color var(--cpf-transition), transform var(--cpf-transition);
+    user-select: none;
+}
+
+.cpf-pagination__btn:hover:not(:disabled) {
+    border-color: var(--cpf-accent);
+    color: var(--cpf-accent);
+    transform: translateY(-1px);
+}
+
+.cpf-pagination__btn.is-active {
+    background: var(--cpf-accent);
+    border-color: var(--cpf-accent);
+    color: #fff;
+    font-weight: 700;
+}
+
+.cpf-pagination__btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.cpf-pagination__btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+.cpf-pagination__dots {
+    font-size: 14px;
+    color: var(--cpf-color-muted);
+    padding: 0 4px;
+    user-select: none;
+}
+
+/* =============================================================================
+   Spinner de carga sobre el grid
+   ============================================================================= */
+.cpf-main {
+    position: relative;
+}
+
+.cpf-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--cpf-radius);
+    z-index: 10;
+    backdrop-filter: blur(2px);
+}
+
+.cpf-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--cpf-color-border);
+    border-top-color: var(--cpf-accent);
+    border-radius: 50%;
+    animation: cpf-spin 0.7s linear infinite;
+}
+
+@keyframes cpf-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* =============================================================================
+   Botón de carrito — estados
+   ============================================================================= */
+.cpf-card__btn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cpf-accent) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform var(--cpf-transition), background var(--cpf-transition), opacity var(--cpf-transition);
+    flex-shrink: 0;
+    padding: 0 !important;
+    box-shadow: none !important;
+    outline: none;
+}
+
+.cpf-card__btn svg {
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+}
+
+.cpf-card:hover .cpf-card__btn {
+    transform: scale(1.1);
+}
+
+.cpf-card__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.cpf-card__btn.is-loading {
+    opacity: 0.7;
+    pointer-events: none;
+    animation: cpf-spin 0.7s linear infinite;
+}
+
+.cpf-card__btn.is-added {
+    background: #10b981 !important;
+    transform: scale(1.15);
+}
+
+/* =============================================================================
+   Responsivo — Tablet (max 1024px)
+   ============================================================================= */
+@media (max-width: 1024px) {
+    .cpf-wrapper--has-sidebar {
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+    }
+
+    .cpf-grid {
+        grid-template-columns: repeat(var(--cpf-cols-tablet, 2), 1fr);
+        gap: 16px;
+    }
+}
+
+/* =============================================================================
+   Responsivo — Móvil (max 768px)
+   ============================================================================= */
+@media (max-width: 768px) {
+    .cpf-wrapper--has-sidebar {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    /* Sidebar colapsable en móvil */
+    .cpf-sidebar {
+        position: static;
+        border-radius: 12px;
+        margin-bottom: 16px;
+    }
+
+    .cpf-sidebar__body {
+        display: none;
+    }
+
+    .cpf-sidebar__body.is-open {
+        display: block;
+    }
+
+    .cpf-sidebar__header {
+        cursor: pointer;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .cpf-sidebar__header.is-open {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--cpf-color-border);
+    }
+
+    .cpf-sidebar__title::after {
+        content: ' ▾';
+        font-size: 12px;
+        color: var(--cpf-color-muted);
+    }
+
+    .cpf-sidebar__header.is-open .cpf-sidebar__title::after {
+        content: ' ▴';
+    }
+
+    /* Toolbar en móvil */
+    .cpf-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .cpf-toolbar__right {
+        margin-left: 0;
+        justify-content: space-between;
+    }
+
+    .cpf-search {
+        max-width: 100%;
+        min-width: unset;
+    }
+
+    .cpf-sort__select {
+        font-size: 13px;
+    }
+
+    /* Grid en móvil */
+    .cpf-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .cpf-card__name {
+        font-size: 13px;
+    }
+
+    .cpf-card__price-current {
+        font-size: 14px;
+    }
+
+    /* Paginación en móvil */
+    .cpf-pagination {
+        gap: 4px;
+        margin-top: 24px;
+    }
+
+    .cpf-pagination__btn {
+        min-width: 34px;
+        height: 34px;
+        font-size: 12px;
+    }
+}
+
+/* =============================================================================
+   Responsivo — Móvil pequeño (max 480px)
+   ============================================================================= */
+@media (max-width: 480px) {
+    .cpf-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cpf-card__image-wrap {
+        padding-bottom: 75%;
+    }
+}
+
+/* =============================================================================
+   Botón "Ver carrito" inyectado en el side cart
+   ============================================================================= */
+.cpf-view-cart-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px 20px;
+    margin-bottom: 10px;
+    background: transparent !important;
+    color: #cc1111 !important;
+    border: 2px solid #cc1111 !important;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none !important;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+    box-sizing: border-box;
+    letter-spacing: 0.01em;
+}
+
+.cpf-view-cart-btn:hover,
+.cpf-view-cart-btn:focus {
+    background: #cc1111 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.cpf-view-cart-btn svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* =============================================================================
+   Ocultar SOLO el banner de "añadido al carrito" de WooCommerce
+   La clase .cpf-hide-wc-notice la añade JS solo en ese contexto
+   ============================================================================= */
+body.cpf-added-to-cart .woocommerce-message:first-of-type {
+    display: none !important;
+}

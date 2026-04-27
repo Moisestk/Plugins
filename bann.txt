@@ -1,0 +1,70 @@
+cat <<EOF > guia_evaluacion_bd.txt
+==========================================================
+GUIA RAPIDA: UNIDAD II - USUARIOS Y RESPALDOS (LINUX)
+==========================================================
+
+1. GESTION DE USUARIOS (Dentro de SQL: mysql> )
+----------------------------------------------------------
+-- Crear un nuevo usuario local:
+CREATE USER 'nombre'@'localhost' IDENTIFIED BY 'contraseña';
+
+-- Eliminar un usuario:
+DROP USER 'nombre'@'localhost';
+
+-- Cambiar contraseña de un usuario:
+ALTER USER 'nombre'@'localhost' IDENTIFIED BY 'nueva_clave';
+
+-- Ver todos los usuarios creados en el sistema:
+SELECT user, host FROM mysql.user;
+
+
+2. ADMINISTRAR PERMISOS (Dentro de SQL: mysql> )
+----------------------------------------------------------
+-- Otorgar todos los privilegios sobre una BD:
+GRANT ALL PRIVILEGES ON nombre_bd.* TO 'nombre'@'localhost';
+
+-- Otorgar permisos especificos (Lectura e Insercion):
+GRANT SELECT, INSERT ON nombre_bd.* TO 'nombre'@'localhost';
+
+-- Quitar (Revocar) permisos especificos:
+REVOKE DELETE, UPDATE ON nombre_bd.* FROM 'nombre'@'localhost';
+
+-- Ver que permisos tiene mi usuario:
+SHOW GRANTS FOR 'nombre'@'localhost';
+
+-- REGLA DE ORO: Siempre refrescar privilegios al terminar:
+FLUSH PRIVILEGES;
+
+
+3. RESPALDO Y RECUPERACION (Terminal Linux: user@linux:~$ )
+----------------------------------------------------------
+-- RESPALDO (Exportar):
+mysqldump -u usuario -p nombre_bd > respaldo.sql
+
+-- RECUPERACION (Importar):
+-- Nota: La base de datos debe existir (CREATE DATABASE ...)
+mysql -u usuario -p nombre_bd < respaldo.sql
+
+-- Respaldo de TODAS las bases de datos:
+mysqldump -u root -p --all-databases > respaldo_total.sql
+
+
+4. NIVELES DE PRIVILEGIOS
+----------------------------------------------------------
+*.* -> Nivel Global (Todo el servidor)
+nombre_bd.* -> Nivel Base de Datos
+nombre_bd.nombre_tabla  -> Nivel Tabla especifica
+
+
+5. COMANDOS DE SERVICIO (Linux)
+----------------------------------------------------------
+-- Iniciar sesion como administrador:
+sudo mysql -u root -p
+
+-- Revisar si el servicio esta corriendo:
+systemctl status mysql
+
+-- Reiniciar el servicio:
+sudo systemctl restart mysql
+==========================================================
+EOF

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:vynk.us)",
+      "Read(//c/Users/Moises/Documents/Code/C/**)"
+    ]
+  }
+}
