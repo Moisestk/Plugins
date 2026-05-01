@@ -18,6 +18,40 @@ $has_shipping     = WC()->cart->needs_shipping();
 $cart_count       = WC()->cart->get_cart_contents_count();
 ?>
 
+<?php
+$_nav_logo = absint( $opts['logo_id'] );
+?>
+<nav class="vynk-topnav" aria-label="Navegación">
+    <div class="vynk-topnav-inner">
+        <div class="vynk-topnav-left">
+            <a href="<?php echo esc_url( home_url( '/carrito' ) ); ?>" class="vynk-topnav-back">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                <span><?php esc_html_e( 'Volver al carrito', 'vynk-checkout' ); ?></span>
+            </a>
+            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="vynk-topnav-home">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span><?php esc_html_e( 'Inicio', 'vynk-checkout' ); ?></span>
+            </a>
+        </div>
+
+        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="vynk-topnav-logo">
+            <img src="<?php echo esc_url( VYNK_CHECKOUT_URL . 'assets/img/vynk-logo-web.webp' ); ?>"
+                 alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+        </a>
+
+        <div class="vynk-topnav-right">
+            <div class="vynk-nav-payment-methods">
+                <span class="vynk-nav-payment-label"><?php esc_html_e( 'ACEPTAMOS', 'vynk-checkout' ); ?></span>
+                <div class="vynk-payment-icons">
+                    <img src="<?php echo esc_url( VYNK_CHECKOUT_URL . 'assets/img/zelle.png' ); ?>" alt="Zelle" class="vynk-pay-img" title="Zelle">
+                    <img src="<?php echo esc_url( VYNK_CHECKOUT_URL . 'assets/img/binance.png' ); ?>" alt="Binance Pay" class="vynk-pay-img" title="Binance Pay">
+                    <img src="<?php echo esc_url( VYNK_CHECKOUT_URL . 'assets/img/paypal.png' ); ?>" alt="PayPal" class="vynk-pay-img" title="PayPal">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
 <?php do_action( 'woocommerce_before_checkout_form', $checkout ); ?>
 
 <form name="checkout" method="post"
@@ -213,6 +247,16 @@ $cart_count       = WC()->cart->get_cart_contents_count();
 
                 <!-- Totales (fragmento WC para actualizaciones en tiempo real) -->
                 <?php Vynk_Checkout::instance()->render_totals(); ?>
+
+                <!-- Métodos de pago aceptados -->
+                <div class="vynk-summary-payment-methods">
+                    <span class="vynk-summary-payment-label"><?php esc_html_e( 'MÉTODOS DE PAGO ACEPTADOS', 'vynk-checkout' ); ?></span>
+                    <div class="vynk-payment-icons">
+                        <img src="<?php echo esc_url( VYNK_CHECKOUT_URL . 'assets/img/zelle.png' ); ?>" alt="Zelle" class="vynk-pay-img" title="Zelle">
+                        <img src="<?php echo esc_url( VYNK_CHECKOUT_URL . 'assets/img/binance.png' ); ?>" alt="Binance Pay" class="vynk-pay-img" title="Binance Pay">
+                        <img src="<?php echo esc_url( VYNK_CHECKOUT_URL . 'assets/img/paypal.png' ); ?>" alt="PayPal" class="vynk-pay-img" title="PayPal">
+                    </div>
+                </div>
 
             </div>
         </div>

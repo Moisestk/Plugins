@@ -23,6 +23,77 @@
     --vynk-transition:     0.22s ease;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   TOP NAV BAR
+   ═══════════════════════════════════════════════════════════ */
+.vynk-topnav {
+    background: #fff;
+    border-bottom: 1.5px solid var(--vynk-border);
+    padding: 12px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.vynk-topnav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.vynk-topnav-back,
+.vynk-topnav-home {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--vynk-font);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--vynk-secondary);
+    text-decoration: none;
+    padding: 7px 14px;
+    border: 1.5px solid var(--vynk-border);
+    border-radius: 50px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: border-color var(--vynk-transition), color var(--vynk-transition), background var(--vynk-transition);
+}
+
+.vynk-topnav-back:hover,
+.vynk-topnav-home:hover {
+    border-color: var(--vynk-accent);
+    color: var(--vynk-accent);
+    background: var(--vynk-accent-soft);
+}
+
+.vynk-topnav-logo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.vynk-topnav-logo img { max-height: 36px; width: auto; }
+
+.vynk-topnav-sitename {
+    font-family: var(--vynk-font);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--vynk-accent);
+    letter-spacing: -0.5px;
+}
+
+@media (max-width: 480px) {
+    .vynk-topnav-back span,
+    .vynk-topnav-home span { display: none; }
+    .vynk-topnav-back,
+    .vynk-topnav-home { padding: 8px 10px; }
+}
+
 /* ── Base ─────────────────────────────────────────────────── */
 .vynk-checkout-wrapper *,
 .vynk-checkout-wrapper *::before,
@@ -60,8 +131,8 @@
     padding: 32px 16px 60px;
 }
 
-.vynk-checkout-main  { display: flex; flex-direction: column; gap: 12px; }
-.vynk-checkout-sidebar { position: sticky; top: 20px; align-self: start; }
+.vynk-checkout-main  { display: flex; flex-direction: column; gap: 12px; min-width: 0; overflow-x: hidden; }
+.vynk-checkout-sidebar { position: sticky; top: 20px; align-self: start; min-width: 0; }
 
 /* ── Branding ─────────────────────────────────────────────── */
 .vynk-checkout-branding {
@@ -413,6 +484,7 @@
    ═══════════════════════════════════════════════════════════ */
 .vynk-checkout-wrapper #payment {
     background: transparent; border: none; padding: 0; margin: 0;
+    max-width: 100%; overflow-x: hidden;
 }
 
 .vynk-checkout-wrapper #payment ul.payment_methods {
@@ -1086,7 +1158,7 @@
     .vynk-cart-wrapper {
         grid-template-columns: 1fr !important;
         gap: 16px;
-        padding: 0 14px 40px;
+        padding: 20px 14px 40px;
         max-width: 100%;
     }
     .vynk-checkout-sidebar,
@@ -1139,7 +1211,7 @@
      * !important is REQUIRED: the base .vynk-thankyou-grid rule appears later in
      * this file (CSS cascade), so without it the 1fr 300px desktop columns win and
      * crush the main column to ~27px on mobile, making it invisible. */
-    .vynk-thankyou-wrapper    { padding: 0 14px 48px; }
+    .vynk-thankyou-wrapper    { padding: 20px 14px 48px; }
     .vynk-thankyou-grid       { grid-template-columns: 1fr !important; gap: 14px; }
     .vynk-thankyou-sidebar    { position: static !important; max-width: 100% !important; width: 100%; }
     .vynk-thankyou-infobar    { gap: 10px; margin-bottom: 18px; }
@@ -1154,7 +1226,7 @@
 @media (max-width: 540px) {
 
     .vynk-checkout-wrapper,
-    .vynk-cart-wrapper { padding: 0 10px 32px; gap: 12px; }
+    .vynk-cart-wrapper { padding: 16px 10px 32px; gap: 12px; }
 
     /* Accordion */
     .vynk-accordion-header { padding: 13px 14px; gap: 8px; }
@@ -1505,3 +1577,23 @@
     transform: translateY(-1px);
     color: var(--vynk-accent);
 }
+
+
+/* PAYMENT METHOD ICONS */
+.vynk-topnav-inner{display:grid!important;grid-template-columns:1fr auto 1fr!important;align-items:center!important;gap:12px}
+.vynk-topnav-logo{flex:unset!important}
+.vynk-topnav-left{display:flex;align-items:center;gap:8px}
+.vynk-topnav-right{display:flex;align-items:center;justify-content:flex-end}
+.vynk-nav-payment-methods{display:flex;align-items:center;gap:8px}
+.vynk-nav-payment-label{font-family:var(--vynk-font);font-size:10px;font-weight:700;color:var(--vynk-secondary);letter-spacing:.6px;white-space:nowrap;text-transform:uppercase}
+.vynk-payment-icons{display:flex;align-items:center;gap:5px}
+.vynk-pay-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-family:var(--vynk-font);font-size:12px;font-weight:700;color:#fff;flex-shrink:0;cursor:default;-webkit-user-select:none;user-select:none}
+.vynk-pay-zelle{background:#6D1ED4}
+.vynk-pay-binance{background:#1E2026;color:#F0B90B}
+.vynk-pay-paypal{background:#003087}
+.vynk-summary-payment-methods{padding:16px 20px;border-top:1px solid var(--vynk-border);display:flex;flex-direction:column;align-items:center;gap:10px}
+.vynk-summary-payment-label{font-family:var(--vynk-font);font-size:10px;font-weight:700;color:var(--vynk-secondary);letter-spacing:.6px;text-transform:uppercase}
+@media (max-width:480px){.vynk-nav-payment-label{display:none}.vynk-pay-icon{width:24px;height:24px;font-size:10px}}
+
+.vynk-pay-img{width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;display:block}
+@media(max-width:480px){.vynk-pay-img{width:24px;height:24px}}

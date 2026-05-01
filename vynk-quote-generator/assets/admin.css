@@ -1,0 +1,794 @@
+/* ─── App Shell ────────────────────────────────────── */
+#vynk-qg-app {
+    display: flex;
+    font-family: 'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #eaeaea;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+}
+
+/* ─── Catalog Panel (Left) ─────────────────────────── */
+.vynk-catalog {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.vynk-catalog-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 24px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.vynk-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.vynk-logo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #bf1f1f;
+    color: #fff;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 5px 11px;
+    border-radius: 6px;
+    line-height: 1;
+}
+
+.vynk-header-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #222;
+    white-space: nowrap;
+}
+
+.vynk-search-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 360px;
+}
+
+.vynk-category-select {
+    padding: 8px 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    color: #333;
+    background: #f8f8f8;
+    outline: none;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, box-shadow .2s;
+    max-width: 220px;
+    flex-shrink: 0;
+    appearance: auto;
+}
+
+.vynk-category-select:focus {
+    border-color: #bf1f1f;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(191,31,31,.1);
+}
+
+.vynk-search-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    color: #aaa;
+    pointer-events: none;
+    stroke-width: 2;
+}
+
+#vynk-search {
+    width: 100%;
+    padding: 9px 16px 9px 38px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 25px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: #222;
+    background: #f8f8f8;
+    outline: none;
+    transition: border-color .2s, background .2s, box-shadow .2s;
+}
+
+#vynk-search:focus {
+    border-color: #bf1f1f;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(191,31,31,.1);
+}
+
+/* ─── Products Table ────────────────────────────────── */
+#vynk-products-list-wrap {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+}
+
+/* Table column definitions */
+.vynk-col-thumb  { width: 42px;  flex-shrink: 0; }
+.vynk-col-name   { flex: 1;      min-width: 0; }
+.vynk-col-sku    { width: 138px; flex-shrink: 0; }
+.vynk-col-stock  { width: 100px; flex-shrink: 0; }
+.vynk-col-price  { width: 86px;  flex-shrink: 0; text-align: right; }
+.vynk-col-action { width: 118px; flex-shrink: 0; text-align: right; }
+
+/* Header row */
+.vynk-list-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 20px;
+    background: #f8f8f8;
+    border-bottom: 2px solid #e9e9e9;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    flex-shrink: 0;
+}
+
+.vynk-list-header > div {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+/* Scrollable rows area */
+.vynk-products-grid {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.vynk-products-grid::-webkit-scrollbar { width: 5px; }
+.vynk-products-grid::-webkit-scrollbar-track { background: transparent; }
+.vynk-products-grid::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 3px; }
+.vynk-products-grid::-webkit-scrollbar-thumb:hover { background: #ccc; }
+
+/* Product rows */
+.vynk-product-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 20px;
+    border-bottom: 1px solid #f3f3f3;
+    transition: background .1s;
+    min-height: 60px;
+}
+
+.vynk-product-row:hover {
+    background: #fdfafa;
+}
+
+.vynk-product-row:last-child {
+    border-bottom: none;
+}
+
+/* Thumbnail */
+.vynk-row-thumb {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    background: #f5f5f5;
+    border: 1px solid #ebebeb;
+}
+
+/* Name column */
+.vynk-row-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+}
+
+/* SKU column */
+.vynk-row-sku {
+    font-size: 11.5px;
+    color: #888;
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Stock column */
+.vynk-stock-in,
+.vynk-stock-out {
+    font-size: 11.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.vynk-stock-in {
+    color: #2e7d32;
+}
+
+.vynk-stock-in::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2e7d32;
+    flex-shrink: 0;
+}
+
+.vynk-stock-out {
+    color: #b71c1c;
+}
+
+.vynk-stock-out::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #b71c1c;
+    flex-shrink: 0;
+}
+
+/* Price column */
+.vynk-price {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #222;
+    display: block;
+}
+
+.vynk-price-old {
+    font-size: 11px;
+    color: #ccc;
+    text-decoration: line-through;
+    display: block;
+}
+
+/* Add button */
+.vynk-add-btn {
+    border: none;
+    background: #bf1f1f;
+    color: #fff;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: .2px;
+    transition: background .15s, transform .1s;
+    flex-shrink: 0;
+}
+
+.vynk-add-btn:hover:not(:disabled) {
+    background: #991818;
+}
+
+.vynk-add-btn:active:not(:disabled) {
+    transform: scale(.97);
+}
+
+.vynk-add-btn:disabled {
+    background: #ececec;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.vynk-add-btn.is-added {
+    background: #2e7d32;
+}
+
+.vynk-row-add-btn {
+    padding: 7px 13px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.vynk-row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.vynk-view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    color: #888;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: border-color .15s, color .15s, background .15s;
+}
+
+.vynk-view-btn:hover {
+    border-color: #bf1f1f;
+    color: #bf1f1f;
+    background: rgba(191,31,31,.05);
+}
+
+.vynk-view-btn svg {
+    width: 13px;
+    height: 13px;
+    stroke-width: 2;
+}
+
+/* ─── Load More ─────────────────────────────────────── */
+.vynk-load-more-wrap {
+    padding: 12px 20px 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.vynk-load-more-btn {
+    padding: 9px 28px;
+    border: 2px solid #bf1f1f;
+    background: transparent;
+    color: #bf1f1f;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.vynk-load-more-btn:hover {
+    background: #bf1f1f;
+    color: #fff;
+}
+
+/* ─── Loading / Empty States ────────────────────────── */
+.vynk-loading {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    color: #bbb;
+    font-size: 13px;
+}
+
+.vynk-spinner {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    border: 3px solid #f0f0f0 !important;
+    border-top-color: #bf1f1f !important;
+    border-radius: 50% !important;
+    animation: vynk-spin .75s linear infinite !important;
+    margin-bottom: 10px;
+    background: none !important;
+    box-shadow: none !important;
+}
+
+@keyframes vynk-spin {
+    to { transform: rotate(360deg); }
+}
+
+.vynk-no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px;
+    color: #ccc;
+    font-size: 13px;
+}
+
+.vynk-no-results svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    color: #e0e0e0;
+}
+
+/* ─── Quote Panel (Right) ───────────────────────────── */
+.vynk-quote-panel {
+    width: 340px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-left: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.vynk-quote-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 18px;
+    background: #222;
+    flex-shrink: 0;
+}
+
+.vynk-quote-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: .4px;
+}
+
+.vynk-quote-title svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
+    color: #bf1f1f;
+}
+
+.vynk-clear-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    transition: color .2s, background .2s;
+}
+
+.vynk-clear-btn:hover {
+    color: #ef4444;
+    background: rgba(255,255,255,.08);
+}
+
+.vynk-clear-btn svg {
+    width: 15px;
+    height: 15px;
+    stroke-width: 1.75;
+}
+
+/* ─── Empty State ───────────────────────────────────── */
+.vynk-quote-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+    color: #ccc;
+}
+
+.vynk-quote-empty svg {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 14px;
+    color: #e5e7eb;
+}
+
+.vynk-quote-empty p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #bbb;
+    margin: 0;
+}
+
+/* ─── Quote Items List ──────────────────────────────── */
+.vynk-quote-items {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.vynk-quote-items::-webkit-scrollbar { width: 5px; }
+.vynk-quote-items::-webkit-scrollbar-track { background: transparent; }
+.vynk-quote-items::-webkit-scrollbar-thumb { background: #eee; border-radius: 3px; }
+
+.vynk-quote-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #f4f4f4;
+    transition: background .15s;
+}
+
+.vynk-quote-item:hover {
+    background: #fafafa;
+}
+
+.vynk-quote-item-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 7px;
+    flex-shrink: 0;
+    background: #f5f5f5;
+    display: block;
+}
+
+.vynk-quote-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.vynk-quote-item-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vynk-quote-item-sku {
+    font-size: 10.5px;
+    color: #bbb;
+    margin: 0 0 4px;
+}
+
+.vynk-quote-item-price {
+    font-size: 13px;
+    font-weight: 700;
+    color: #bf1f1f;
+    margin: 0;
+}
+
+.vynk-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.vynk-qty-btn {
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-weight: 500;
+    line-height: 1;
+    transition: border-color .15s, color .15s;
+    padding: 0;
+}
+
+.vynk-qty-btn:hover {
+    border-color: #bf1f1f;
+    color: #bf1f1f;
+}
+
+.vynk-qty-val {
+    width: 22px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #222;
+}
+
+.vynk-remove-btn {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    margin-left: 2px;
+    transition: color .15s;
+}
+
+.vynk-remove-btn:hover { color: #ef4444; }
+
+.vynk-remove-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 1.75;
+}
+
+/* ─── Quote Summary ─────────────────────────────────── */
+.vynk-quote-summary {
+    border-top: 1px solid #f0f0f0;
+    padding: 14px 16px;
+    background: #fafafa;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vynk-subtotal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.vynk-subtotal-row strong {
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* ─── Buttons ───────────────────────────────────────── */
+.vynk-btn {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    letter-spacing: .3px;
+    transition: all .2s;
+    border: 2px solid transparent;
+    line-height: 1.2;
+}
+
+.vynk-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+.vynk-btn-outline {
+    background: transparent;
+    border-color: #bf1f1f;
+    color: #bf1f1f;
+}
+
+.vynk-btn-outline:hover:not(:disabled) {
+    background: #bf1f1f;
+    color: #fff;
+}
+
+.vynk-btn-primary {
+    background: #bf1f1f;
+    border-color: #bf1f1f;
+    color: #fff;
+}
+
+.vynk-btn-primary:hover:not(:disabled) {
+    background: #991818;
+    border-color: #991818;
+}
+
+.vynk-btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* ─── Shipping Status (auto-calculating) ───────────── */
+.vynk-shipping-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #aaa;
+    padding: 4px 0;
+}
+
+.vynk-spinner-sm {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    max-width: 14px !important;
+    max-height: 14px !important;
+    border-width: 2px !important;
+    margin-bottom: 0 !important;
+}
+
+/* ─── Shipping Results ──────────────────────────────── */
+.vynk-shipping-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 6px;
+}
+
+.vynk-rates-simple {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.vynk-simple-rate {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 12px;
+    background: #f8f8f8;
+    border-radius: 7px;
+    border-left: 3px solid #bf1f1f;
+    gap: 8px;
+    min-width: 0;
+}
+
+.vynk-simple-rate-name {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #222;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.vynk-simple-rate-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+    line-height: 1.4;
+}
+
+.vynk-simple-rate-cost {
+    font-size: 11px;
+    color: #999;
+    font-weight: 500;
+}
+
+.vynk-simple-rate-total {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #bf1f1f;
+}
+
+/* ─── Catalog height (set via JS) ──────────────────── */
+.vynk-catalog,
+.vynk-quote-panel {
+    max-height: 100%;
+}
+
+/* ─── Suppress conflicting plugin overlays ──────────── */
+.toplevel_page_vynk-quote-generator .blockOverlay,
+.toplevel_page_vynk-quote-generator .woocommerce-overlay,
+.toplevel_page_vynk-quote-generator .cartflows-admin-page-loader,
+.toplevel_page_vynk-quote-generator #eael-admin-notice-wrapper,
+.toplevel_page_vynk-quote-generator .eael-loading-overlay {
+    display: none !important;
+}
