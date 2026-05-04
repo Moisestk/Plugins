@@ -9,6 +9,8 @@
     var isLoading       = false;
     var quoteItems      = [];
     var shippingData    = null;
+    var currentView     = 'catalog'; // 'catalog' or 'history'
+    var historyData     = [];
 
     /* ── Utilities ───────────────────────────────────── */
     function fmtPrice(n) {
@@ -40,6 +42,15 @@
 
     function genRef() {
         return 'COT-' + Date.now().toString(36).toUpperCase().slice(-8);
+    }
+
+    function showModal(msg) {
+        $('#vynk-modal-message').text(msg);
+        $('#vynk-modal-root').fadeIn(200);
+    }
+
+    function hideModal() {
+        $('#vynk-modal-root').fadeOut(150);
     }
 
     /* ── Product Loading ─────────────────────────────── */
@@ -378,12 +389,30 @@
         return loaded === fonts.length;
     }
 
+    function saveQuote(ref) {
+        if (quoteItems.length === 0) return;
+
+        $.post(VynkQG.ajaxUrl, {
+            action: 'vynk_qg_save_quote',
+            nonce: VynkQG.nonce,
+            ref: ref,
+            items: JSON.stringify(quoteItems),
+            total: subtotal(),
+            shipping_data: JSON.stringify(shippingData),
+        });
+    }
+
     async function generatePDF() {
         var $btn = $('#vynk-gen-pdf');
         $btn.prop('disabled', true).text('Generando PDF…');
 
         try {
             await calcShippingPromise();
+            var ref   = genRef();
+            
+            /* Save to history */
+            saveQuote(ref);
+
             var jsPDF  = window.jspdf.jsPDF;
             var doc    = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
             var hasBarlowFont = await loadBarlowFont(doc);
@@ -403,7 +432,7 @@
             var BGLIGHT  = [248, 248, 248];
             var BGRED    = [240, 240, 240];
 
-            var ref   = genRef();
+            var ref   = genRef(); // Note: We actually used this ref for saving above
             var today = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
             var sub   = subtotal();
 
@@ -766,7 +795,7 @@
 
         } catch (err) {
             console.error('[VynkQG] PDF Error:', err);
-            alert('Error al generar el PDF. Revisa la consola para más detalles.');
+            showModal('Error al generar el PDF. Revisa la consola para más detalles.');
         }
 
         $btn.prop('disabled', false).html(
@@ -776,6 +805,92 @@
             '<line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>' +
             '</svg> Generar PDF'
         );
+    }
+
+    /* ── History View ───────────────────────────────── */
+    function toggleView() {
+        if (currentView === 'catalog') {
+            currentView = 'history';
+            $('#vynk-catalog-controls').hide();
+            $('#vynk-history-controls').show();
+            $('#vynk-products-list-wrap').hide();
+            $('#vynk-load-more-wrap').hide();
+            $('#vynk-no-results').hide();
+            $('#vynk-history-list-wrap').show();
+            $('#vynk-toggle-view').addClass('is-active').html(
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                '<path d="M4 6h16M4 12h16M4 18h16"/></svg> <span>Catálogo</span>'
+            );
+            loadHistory();
+        } else {
+            currentView = 'catalog';
+            $('#vynk-catalog-controls').show();
+            $('#vynk-history-controls').hide();
+            $('#vynk-history-list-wrap').hide();
+            $('#vynk-toggle-view').removeClass('is-active').html(
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                '<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> <span>Historial</span>'
+            );
+            loadProducts(true);
+        }
+    }
+
+    function loadHistory() {
+        $('#vynk-history-grid').empty();
+        $('#vynk-loading').show();
+
+        var hSearch = $('#vynk-history-search').val();
+        var hDate   = $('#vynk-history-date').val();
+
+        $.post(VynkQG.ajaxUrl, {
+            action: 'vynk_qg_get_history',
+            nonce:  VynkQG.nonce,
+            search: hSearch,
+            date:   hDate,
+        }, function (res) {
+            $('#vynk-loading').hide();
+            if (!res.success) return;
+
+            historyData = res.data;
+            if (historyData.length === 0) {
+                $('#vynk-history-grid').html('<div class="vynk-empty-history">No se encontraron cotizaciones con estos filtros.</div>');
+                return;
+            }
+
+            $.each(historyData, function (_, q) {
+                $('#vynk-history-grid').append(buildHistoryRow(q));
+            });
+        });
+    }
+
+    function buildHistoryRow(q) {
+        return [
+            '<div class="vynk-history-row">',
+                '<div class="vynk-hist-col-date">' + q.date + '</div>',
+                '<div class="vynk-hist-col-ref">' + q.ref + '</div>',
+                '<div class="vynk-hist-col-total">' + fmtPrice(q.total) + '</div>',
+                '<div class="vynk-hist-col-action">',
+                    '<button class="vynk-reuse-btn" data-id="' + q.id + '">Reutilizar</button>',
+                '</div>',
+            '</div>'
+        ].join('');
+    }
+
+    function reuseQuote(id) {
+        var quote = historyData.find(function(q) { return q.id == id; });
+        if (!quote || !quote.data || !quote.data.items) return;
+
+        if (quoteItems.length > 0) {
+            if (!window.confirm('¿Reemplazar la cotización actual con esta del historial?')) return;
+        }
+
+        quoteItems = quote.data.items;
+        shippingData = quote.data.shipping_data || null;
+        renderQuote();
+        if (shippingData) renderShipping();
+        else scheduleShipping();
+        
+        showModal('Cotización ' + quote.ref + ' cargada correctamente.');
     }
 
     /* ── Categories ─────────────────────────────────── */
@@ -883,6 +998,32 @@
         /* Generate PDF */
         $('#vynk-gen-pdf').on('click', function () {
             generatePDF();
+        });
+
+        /* Toggle View (Catalog/History) */
+        $('#vynk-toggle-view').on('click', function () {
+            toggleView();
+        });
+
+        /* Reuse from history */
+        $(document).on('click', '.vynk-reuse-btn', function () {
+            reuseQuote($(this).data('id'));
+        });
+
+        /* History filters */
+        var hSearchTimer;
+        $(document).on('input', '#vynk-history-search', function () {
+            clearTimeout(hSearchTimer);
+            hSearchTimer = setTimeout(function () { loadHistory(); }, 450);
+        });
+
+        $(document).on('change', '#vynk-history-date', function () {
+            loadHistory();
+        });
+
+        /* Modal Close */
+        $('#vynk-modal-close, .vynk-modal-backdrop').on('click', function () {
+            hideModal();
         });
     });
 

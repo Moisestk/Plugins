@@ -24,10 +24,28 @@ final class Vynk_Quote_Generator {
     private function __construct() {
         add_action( 'admin_menu',            [ $this, 'register_menu' ] );
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+        add_action( 'init',                  [ $this, 'register_post_type' ] );
         add_action( 'wp_ajax_vynk_qg_products',   [ $this, 'ajax_products' ] );
         add_action( 'wp_ajax_vynk_qg_shipping',   [ $this, 'ajax_shipping' ] );
         add_action( 'wp_ajax_vynk_qg_categories', [ $this, 'ajax_categories' ] );
         add_action( 'wp_ajax_vynk_qg_font',       [ $this, 'ajax_font' ] );
+        add_action( 'wp_ajax_vynk_qg_save_quote',  [ $this, 'ajax_save_quote' ] );
+        add_action( 'wp_ajax_vynk_qg_get_history', [ $this, 'ajax_get_history' ] );
+    }
+
+    public function register_post_type() {
+        register_post_type( 'vynk_quote', [
+            'labels' => [
+                'name'          => 'Cotizaciones (Historial)',
+                'singular_name' => 'Cotización',
+            ],
+            'public'       => false,
+            'show_ui'      => true,
+            'show_in_menu' => false,
+            'supports'     => [ 'title', 'editor' ],
+            'capability_type' => 'post',
+            'map_meta_cap'    => true,
+        ] );
     }
 
     public function register_menu() {
@@ -262,6 +280,77 @@ final class Vynk_Quote_Generator {
         wp_send_json_success( $b64 );
     }
 
+    public function ajax_save_quote() {
+        check_ajax_referer( 'vynk_qg', 'nonce' );
+        if ( ! current_user_can( 'manage_woocommerce' ) ) wp_die( -1 );
+
+        $ref   = sanitize_text_field( $_POST['ref'] ?? '' );
+        $items = wp_unslash( $_POST['items'] ?? '[]' );
+        $total = floatval( $_POST['total'] ?? 0 );
+        $ship  = wp_unslash( $_POST['shipping_data'] ?? '' );
+
+        $post_id = wp_insert_post( [
+            'post_type'    => 'vynk_quote',
+            'post_title'   => $ref,
+            'post_content' => wp_json_encode( [
+                'items'         => json_decode( $items, true ),
+                'total'         => $total,
+                'shipping_data' => json_decode( $ship, true ),
+            ] ),
+            'post_status'  => 'publish',
+        ] );
+
+        if ( is_wp_error( $post_id ) ) {
+            wp_send_json_error( 'Error al guardar cotización' );
+        } else {
+            wp_send_json_success( $post_id );
+        }
+    }
+
+    public function ajax_get_history() {
+        check_ajax_referer( 'vynk_qg', 'nonce' );
+        if ( ! current_user_can( 'manage_woocommerce' ) ) wp_die( -1 );
+
+        $search = sanitize_text_field( $_POST['search'] ?? '' );
+        $date   = sanitize_text_field( $_POST['date'] ?? '' );
+
+        $args = [
+            'post_type'      => 'vynk_quote',
+            'posts_per_page' => 20,
+            'post_status'    => 'publish',
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+        ];
+
+        if ( ! empty( $search ) ) {
+            $args['s'] = $search;
+        }
+
+        if ( ! empty( $date ) ) {
+            $args['date_query'] = [ [
+                'year'  => date( 'Y', strtotime( $date ) ),
+                'month' => date( 'm', strtotime( $date ) ),
+                'day'   => date( 'd', strtotime( $date ) ),
+            ] ];
+        }
+
+        $quotes = get_posts( $args );
+
+        $data = [];
+        foreach ( $quotes as $q ) {
+            $content = json_decode( $q->post_content, true );
+            $data[] = [
+                'id'    => $q->ID,
+                'ref'   => $q->post_title,
+                'date'  => get_the_date( 'd/m/Y H:i', $q->ID ),
+                'total' => $content['total'] ?? 0,
+                'data'  => $content,
+            ];
+        }
+
+        wp_send_json_success( $data );
+    }
+
     public function render_page() {
         ?>
         <div class="wrap">
@@ -273,16 +362,38 @@ final class Vynk_Quote_Generator {
                         <span class="vynk-logo-badge">VYNK</span>
                         <span class="vynk-header-title">Generador de Cotizaciones</span>
                     </div>
-                    <div class="vynk-search-wrap">
-                        <svg class="vynk-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                        </svg>
-                        <input type="text" id="vynk-search" placeholder="Buscar por nombre o SKU…" autocomplete="off" />
+
+                    <div id="vynk-catalog-controls" class="vynk-catalog-controls">
+                        <div class="vynk-search-wrap">
+                            <svg class="vynk-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                            </svg>
+                            <input type="text" id="vynk-search" placeholder="Buscar por nombre o SKU…" autocomplete="off" />
+                        </div>
+
+                        <select id="vynk-category" class="vynk-category-select">
+                            <option value="0">Todas las categorías</option>
+                        </select>
                     </div>
 
-                    <select id="vynk-category" class="vynk-category-select">
-                        <option value="0">Todas las categorías</option>
-                    </select>
+                    <div id="vynk-history-controls" class="vynk-history-controls" style="display:none;">
+                        <div class="vynk-hist-filter-wrap">
+                            <div class="vynk-hist-search-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                                </svg>
+                                <input type="text" id="vynk-history-search" placeholder="Buscar Ref (COT-…)" autocomplete="off" />
+                            </div>
+                            <input type="date" id="vynk-history-date" class="vynk-hist-date-input" />
+                        </div>
+                    </div>
+
+                    <button id="vynk-toggle-view" class="vynk-toggle-view-btn" title="Ver historial">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Historial</span>
+                    </button>
                 </div>
 
                 <div id="vynk-loading" class="vynk-loading">
@@ -311,6 +422,16 @@ final class Vynk_Quote_Generator {
                         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6M11 8v6" opacity=".4"/>
                     </svg>
                     <p>Sin resultados para tu búsqueda</p>
+                </div>
+
+                <div id="vynk-history-list-wrap" class="vynk-history-list-wrap" style="display:none;">
+                    <div class="vynk-history-list-header">
+                        <div class="vynk-hist-col-date">Fecha / Hora</div>
+                        <div class="vynk-hist-col-ref">Referencia</div>
+                        <div class="vynk-hist-col-total">Total</div>
+                        <div class="vynk-hist-col-action"></div>
+                    </div>
+                    <div id="vynk-history-grid" class="vynk-history-grid"></div>
                 </div>
             </div>
 
@@ -373,6 +494,19 @@ final class Vynk_Quote_Generator {
                     </button>
                 </div>
             </div>
+
+        <div id="vynk-modal-root" class="vynk-modal-root" style="display:none;">
+            <div class="vynk-modal-backdrop"></div>
+            <div class="vynk-modal-container">
+                <div class="vynk-modal-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                </div>
+                <div id="vynk-modal-message" class="vynk-modal-message"></div>
+                <button id="vynk-modal-close" class="vynk-btn vynk-btn-primary vynk-modal-btn">Entendido</button>
+            </div>
+        </div>
 
         </div>
         </div>
